@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
       redirect_to question, notice: "Answer has been posted successfully"
     else
       flash[:error] = @answer.errors.full_messages
-      redirect_to question, error: flash[:error]
+      redirect_to question
     end
   end
 
