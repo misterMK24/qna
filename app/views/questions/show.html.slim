@@ -1,2 +1,13 @@
+= render 'shared/errors', resource: question
+- if flash[:error]
+  - flash[:error].each do |err|
+    = err
+
 h1= question.title
 p= question.body
+h2= pluralize(question.answers.count, 'Answer') 
+div id='answers'
+  = render question.answers
+h3 Answer to a question
+= render 'answers/form', answer: question.answers.new
+

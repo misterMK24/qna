@@ -72,6 +72,9 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
+    capybara-wsl (0.3.0)
+      capybara (>= 2.0)
+      launchy (>= 2.0)
     childprocess (3.0.0)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
@@ -253,6 +256,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  capybara-wsl
   devise
   factory_bot_rails
   jbuilder (~> 2.7)

@@ -1,4 +1,5 @@
 require 'rails_helper'
+# TODO: make specs for all actions
 
 RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer) }

@@ -3,12 +3,17 @@ class AnswersController < ApplicationController
     @answers = question.answers 
   end
 
+  def new
+    @answer = question.answers.new
+  end
+
   def create
     @answer = question.answers.new(answer_params)
     if @answer.save
-      redirect_to @answer
+      redirect_to question, notice: "Answer has been posted successfully"
     else
-      render :new
+      flash[:error] = @answer.errors.full_messages
+      redirect_to question, error: flash[:error]
     end
   end
 

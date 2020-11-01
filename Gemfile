@@ -52,6 +52,7 @@ group :test do
   gem 'webdrivers'
   gem 'rails-controller-testing'
   gem 'launchy'
+  gem "capybara-wsl"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
