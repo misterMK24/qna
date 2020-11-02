@@ -1,9 +1,10 @@
 require 'rails_helper'
 
-feature 'User can create question', %q{
-  In order to get an answer from a community
+feature 'User can post an answer', %q{
+  In order to give an answer 
+  for particular question
   As an authenticated user
-  I'd like to be able to ask the question
+  I'd like to be able to post an answer
 } do
 
   given(:user) { create(:user) }
@@ -31,8 +32,13 @@ feature 'User can create question', %q{
     end
   end
 
-  # TODO: with Unauthenticated user. 
+  scenario 'Unanthenticated user tries to answer to a question' do
+    visit question_path(question)
+    
+    fill_in 'Body', with: answer.body
+    click_on 'Post'
+    save_and_open_page_wsl
 
-
-
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
 end
