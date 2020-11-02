@@ -4,29 +4,19 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer) }
   let(:question) { create(:question) }
-
-  describe 'GET #index' do
-    let(:question_with_answers) { create(:question_with_answers) }
-    before { get :index, params: { question_id: question_with_answers.id } }
-
-    it 'returns an array of answers for particular question' do
-      expect(assigns(:answers)).to match_array(question_with_answers.answers)
-    end
-
-    it 'renders index view' do
-      expect(response).to render_template :index
-    end
-  end
+  let(:user) { create(:user) }
 
   describe 'POST #create' do
+    before { login(user) }
+
     context "with valid attributes" do
       it 'saves a new answer into the database' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id } }.to change(Answer, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'redirects to question page' do
         post :create, params: { answer: attributes_for(:answer) , question_id: question.id }
-        expect(response).to redirect_to assigns(:answer)
+        expect(response).to redirect_to question
       end
 
     end
@@ -36,10 +26,63 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id } }.to_not change(Answer, :count)
       end
 
-      it 're-renders new view' do
+      it 'redirects to question page' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
-        expect(response).to render_template :new
+        expect(response).to redirect_to question
       end
     end
   end
+
+  describe 'PATCH #update' do
+    before { login(user) }
+
+    context "with valid attributes" do
+      # it 'assigns the requested question to @question' do
+      #   patch :update, params: { id: question, question: attributes_for(:question) }
+      #   expect(assigns(:question)).to eq question
+      # end
+
+      it 'update answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question.id }  
+        answer.reload
+
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'redirects to updated question page' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question.id }
+
+        expect(response).to redirect_to question
+      end
+    end
+
+    context "with invalid attributes" do
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question.id } }
+
+      it 'does not change the answer' do
+        question.reload
+
+        expect(question.body).to eq 'Body'
+      end
+
+      it 're-renders question page' do
+        expect(response).to render_template 'questions/show'
+      end
+    end    
+  end
+
+  describe 'DELETE #destroy' do
+    before { login(user) }
+    let!(:answer) { create(:answer) }
+
+    it 'deletes the answer' do
+      expect { delete :destroy, params: { id: answer , question_id: question.id } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to question page' do
+      delete :destroy, params: { id: answer , question_id: question.id }
+      expect(response).to redirect_to question
+    end
+  end
+
 end
