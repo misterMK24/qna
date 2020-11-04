@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'User can see a list of questions', %q{
-  In order to get a list of questions,
+feature 'User can see a particular question', %q{
+  In order to get a question page,
   user (no matter - is he registered or not) 
-  should be able to see a list of all questions
+  should be able to see a question page
 } do
 
   background { visit question_path(question) }
