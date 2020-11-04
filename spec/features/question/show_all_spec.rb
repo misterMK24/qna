@@ -6,18 +6,10 @@ feature 'User can see a list of questions', %q{
   should be able to see a list of all questions
 } do
 
-  # given(:user) { create(:user) }
-  # 
-  # background do
-  #   sign_in(user)
-  #   # visit questions_path
-  # end
-
   describe 'wuth questions' do
     given!(:questions) { create_list(:question, 3) }
     
     scenario 'user gets a list of questions' do
-      # save_and_open_page_wsl
       visit questions_path
       
       expect(page).to have_xpath(".//div[@id='questions']/*", count: questions.length) 

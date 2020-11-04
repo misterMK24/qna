@@ -23,7 +23,6 @@ feature 'User can post an answer', %q{
 
       expect(page).to have_content answer.body
       expect(page).to have_content 'Answer has been posted successfully'
-      # expect(page).to have_xpath(".//div[@id='answers']/*", count: question.answers.length)
     end
 
     scenario 'user answers to a question with errors' do
@@ -38,7 +37,6 @@ feature 'User can post an answer', %q{
     
     fill_in 'Body', with: answer.body
     click_on 'Post'
-    # save_and_open_page_wsl
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
