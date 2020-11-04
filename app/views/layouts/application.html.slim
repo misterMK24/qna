@@ -9,7 +9,8 @@ html
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
   
   body
-    p.notice = notice
-    p.alert = alert
-    = render 'layouts/navbar' if user_signed_in?
-    == yield
+    div.container-fluid
+      p.notice = notice
+      p.alert = alert
+      = render 'layouts/navbar' if user_signed_in?
+      == yield

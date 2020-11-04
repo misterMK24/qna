@@ -1,4 +1,12 @@
-h1 All questions
-p= link_to 'Ask question', new_question_path
-div id='questions'
-  = render @questions
+div.row
+  div.col-4
+    div.ml-4
+      h1 Some Panel
+  div.col-6
+    div.d-flex.main_align
+      h1 All questions
+      div.ml-auto
+        p= link_to 'Ask question', new_question_path, class: 'btn btn-info'
+    div.d-flex
+      div id='questions'
+        = render @questions

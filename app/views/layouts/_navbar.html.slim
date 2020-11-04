@@ -1,3 +1,4 @@
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
-  p= link_to 'Sign Out', destroy_user_session_path, method: :delete,
-    data: { confirm: 'Are you sure?' }
+nav.navbar
+  ul.navbar-nav.ml-auto
+    p= link_to 'Sign Out', destroy_user_session_path, method: :delete,
+      data: { confirm: 'Are you sure?' }
