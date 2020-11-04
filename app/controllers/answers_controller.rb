@@ -2,7 +2,9 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = question.answers.new(answer_params)
+    @answer = current_user.authored_answers.new(answer_params) 
+    @answer.question = question
+
     if @answer.save
       redirect_to question, notice: "Answer has been posted successfully"
     else
@@ -11,7 +13,6 @@ class AnswersController < ApplicationController
     end
   end
 
-  # TODO: is it necessary to implement an EDIT action?
   def update
     if answer.update(answer_params)
       redirect_to question, notice: 'Answer has been updated successfully'
@@ -21,8 +22,12 @@ class AnswersController < ApplicationController
   end
   
   def destroy
-    answer.destroy
-    redirect_to question, notice: 'Answer has been successfully deleted'
+    if answer.author == current_user
+      answer.destroy
+      redirect_to question, notice: 'Answer has been successfully deleted'
+    else
+      redirect_to question, notice: 'You are not author of this answer'
+    end
   end
 
   private

@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-  # TODO : back to before_action :question, only: %i[show edit update destroy]
   before_action :authenticate_user!, except: %i[index show]
 
   def index
@@ -7,7 +6,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    question
   end
 
   def new
@@ -15,7 +13,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
+    @question = current_user.authored_questions.new(question_params)
     if @question.save
       redirect_to @question, notice: 'Your quesion successfully created.'
     else
@@ -24,12 +22,9 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    question
   end
 
   def update
-    # question
-    # @question = Question.new(question_params)
     if question.update(question_params)
       redirect_to question, notice: 'Your quesion successfully created.'
     else
@@ -38,8 +33,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy
-    redirect_to questions_path
+    if question.author == current_user
+      question.destroy
+      redirect_to questions_path, notice: 'Question has been successfully deleted'
+    else
+      redirect_to questions_path, notice: 'You are not author of this question'
+    end
   end
 
   private

@@ -20,11 +20,6 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #show' do
     before { get :show, params: { id: question.id } }
 
-    it 'assigns the requested question to @question' do
-      # controller.view_context.question()
-      expect(assigns(:question)).to eq question
-    end
-
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -74,10 +69,6 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
     before { get :edit, params: { id: question.id } }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
     it 'renders show view' do
       expect(response).to render_template :edit
     end
@@ -124,16 +115,35 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
-    let!(:question) { create(:question) }
+    let(:user_with_questions) { create(:user_with_questions) }
+  
+    context 'author' do
+      before { login(user_with_questions) }
 
-    it 'deletes the question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: user_with_questions.authored_questions.first } }.to change(user_with_questions.authored_questions, :count).by(-1)
+      end
+
+      it 'redirects to index page' do
+        delete :destroy, params: { id: user_with_questions.authored_questions.first }
+
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index page' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'third person' do
+      let(:third_person) { create(:user) }
+      before { login(third_person) }
+
+      it 'does not delete the question' do
+        expect { delete :destroy, params: { id: user_with_questions.authored_questions.first } }.to_not change(user_with_questions.authored_questions, :count)
+      end
+
+      it 'redirects to index page' do
+        delete :destroy, params: { id: user_with_questions.authored_questions.first }
+
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end
