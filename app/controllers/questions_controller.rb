@@ -22,13 +22,22 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    if current_user.is_author?(question)
+      render :edit
+    else
+      redirect_to root_path
+    end
   end
 
   def update
-    if question.update(question_params)
-      redirect_to question, notice: 'Your quesion successfully created.'
+    if current_user.is_author?(question)
+      if question.update(question_params)
+        redirect_to question, notice: 'Your quesion has been successfully updated.'
+      else
+        render :edit
+      end
     else
-      render :new
+      redirect_to root_path, notice: 'You are not author of this question'
     end
   end
 
