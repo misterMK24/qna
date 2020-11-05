@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
     if current_user.is_author?(question)
       render :edit
     else
-      redirect_to root_path
+      redirect_to root_path, notice: 'You are not author of this question'
     end
   end
 

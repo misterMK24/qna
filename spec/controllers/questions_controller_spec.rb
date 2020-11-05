@@ -82,7 +82,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'third person' do
       let(:user) { create(:user) }
 
-      it 'redirects to questions page' do
+      it 'redirects to root page' do
         login(user)
         get :edit, params: { id: question.id }
         
@@ -124,7 +124,7 @@ RSpec.describe QuestionsController, type: :controller do
           expect(question.body).to eq 'Body'
         end
 
-        it 're-renders new view' do
+        it 're-renders edit view' do
           expect(response).to render_template :edit
         end
       end

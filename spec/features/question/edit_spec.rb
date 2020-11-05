@@ -36,15 +36,21 @@ feature 'User can edit question', %q{
         expect(page).to have_content "Title can't be blank"
       end
     end
-
+  
     context 'third person' do
       given(:user) { create(:user) }
+      background { sign_in(user) }
 
-      scenario 'third person edits a question' do
-        sign_in(user)
+      scenario 'third person edits a question through show page' do
         visit question_path(question)
         
         expect(page).to have_no_link('Edit')
+      end
+
+      scenario 'third person edits a question through edit page' do
+        visit edit_question_path(question)
+
+        expect(page).to have_content 'You are not author of this question'
       end
     end
   end
