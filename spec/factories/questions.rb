@@ -2,20 +2,19 @@ FactoryBot.define do
   factory :question do
     title { "Title" }
     body { "Body" }
-    author factory: :user
+    user
 
     trait :invalid do
       title { nil }
     end
 
-    factory :question_with_answers do
+    trait :with_answer do
       transient do
-        answers_count { 3 }
+        amount { 1 }
       end
 
       after(:create) do |question, evaluator|
-        create_list(:answer, evaluator.answers_count, question: question)
-        
+        create_list :answer, evaluator.amount, question: question
         question.reload
       end
     end

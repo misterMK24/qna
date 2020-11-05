@@ -8,7 +8,7 @@ feature 'User can post an answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question) { create(:question_with_answers) }
+  given!(:question) { create(:question, :with_answer, amount: 1) }
   given(:answer) { create(:answer) }
 
   describe 'Authenticated user' do

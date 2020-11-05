@@ -68,17 +68,17 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:user_with_answers) { create(:user_with_answers) }
+    let(:user_with_answers) { create(:user, :with_answer, amount: 1) }
 
     context 'author' do
       before { login(user_with_answers) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: user_with_answers.authored_answers.first, question_id: question.id } }.to change(user_with_answers.authored_answers, :count).by(-1)
+        expect { delete :destroy, params: { id: user_with_answers.answers.first, question_id: question.id } }.to change(user_with_answers.answers, :count).by(-1)
       end
 
       it 'redirects to question page' do
-        delete :destroy, params: { id: user_with_answers.authored_answers.first , question_id: question.id }
+        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id }
 
         expect(response).to redirect_to question
       end
@@ -89,11 +89,11 @@ RSpec.describe AnswersController, type: :controller do
       before { login(third_person) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: user_with_answers.authored_answers.first , question_id: question.id } }.to_not change(user_with_answers.authored_answers, :count)
+        expect { delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id } }.to_not change(user_with_answers.answers, :count)
       end
 
       it 'redirects to qeustion page' do
-        delete :destroy, params: { id: user_with_answers.authored_answers.first , question_id: question.id }
+        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id }
 
         expect(response).to redirect_to question
       end

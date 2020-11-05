@@ -9,7 +9,7 @@ feature 'User can see a particular question', %q{
   background { visit question_path(question) }
 
   describe 'with answers' do
-    given!(:question) { create(:question_with_answers) }
+    given!(:question) { create(:question, :with_answer, amount: 1) }
 
     scenario 'user gets a question page with answers' do
       expect(page).to have_content(question.title)

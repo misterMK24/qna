@@ -7,7 +7,7 @@ feature 'User can see a list of questions', %q{
 } do
 
   describe 'wuth questions' do
-    given!(:questions) { create_list(:question, 3) }
+    given!(:questions) { create_list(:question, 2) }
     
     scenario 'user gets a list of questions' do
       visit questions_path
