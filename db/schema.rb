@@ -20,8 +20,9 @@ ActiveRecord::Schema.define(version: 2020_11_04_143205) do
     t.bigint "question_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "author_id"
+    t.bigint "user_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -29,7 +30,8 @@ ActiveRecord::Schema.define(version: 2020_11_04_143205) do
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "author_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -45,6 +47,6 @@ ActiveRecord::Schema.define(version: 2020_11_04_143205) do
   end
 
   add_foreign_key "answers", "questions"
-  add_foreign_key "answers", "users", column: "author_id"
-  add_foreign_key "questions", "users", column: "author_id"
+  add_foreign_key "answers", "users"
+  add_foreign_key "questions", "users"
 end

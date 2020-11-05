@@ -1,8 +1,6 @@
 class AddAuthorToQuestionAndAnswer < ActiveRecord::Migration[6.0]
   def change
-    add_column :questions, :author_id, :bigint
-    add_foreign_key :questions, :users, column: :author_id, primary_key: "id"
-    add_column :answers, :author_id, :bigint
-    add_foreign_key :answers, :users, column: :author_id, primary_key: "id"
+    add_reference :questions, :user, foreign_key: true
+    add_reference :answers, :user, foreign_key: true
   end
 end
