@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = current_user.authored_answers.new(answer_params) 
+    @answer = current_user.answers.new(answer_params) 
     @answer.question = question
 
     if @answer.save
@@ -22,7 +22,7 @@ class AnswersController < ApplicationController
   end
   
   def destroy
-    if answer.author == current_user
+    if current_user.is_author?(answer)
       answer.destroy
       redirect_to question, notice: 'Answer has been successfully deleted'
     else
