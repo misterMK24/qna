@@ -12,5 +12,5 @@ html
     div.container-fluid
       p.notice = notice
       p.alert = alert
-      = render 'layouts/navbar' if user_signed_in?
+      = render 'layouts/navbar'
       == yield
