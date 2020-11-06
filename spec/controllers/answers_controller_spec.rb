@@ -10,11 +10,11 @@ RSpec.describe AnswersController, type: :controller do
 
     context "with valid attributes" do
       it 'saves a new answer into the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id } }.to change(Answer, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(Answer, :count).by(1)
       end
 
       it 'redirects to question page' do
-        post :create, params: { answer: attributes_for(:answer) , question_id: question.id }
+        post :create, params: { answer: attributes_for(:answer) , question_id: question }
 
         expect(response).to redirect_to question
       end
@@ -23,11 +23,11 @@ RSpec.describe AnswersController, type: :controller do
     
     context "with invalid attributes" do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id } }.to_not change(Answer, :count)
+        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
       end
 
       it 'redirects to question page' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
 
         expect(response).to redirect_to question
       end
@@ -42,7 +42,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'author' do
       it 'renders edit view' do
         login(user_with_qna)
-        get :edit, params: { id: answer.id, question_id: question.id }
+        get :edit, params: { id: answer, question_id: question }
 
         expect(response).to render_template :edit
       end
@@ -51,7 +51,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'third person' do
       it 'redirects to root page' do
         login(user)
-        get :edit, params: { id: answer.id, question_id: question.id }
+        get :edit, params: { id: answer, question_id: question }
 
         expect(response).to redirect_to root_path
       end
@@ -63,21 +63,21 @@ RSpec.describe AnswersController, type: :controller do
 
     context "with valid attributes" do
       it 'update answer attributes' do
-        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question.id }  
+        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question }  
         answer.reload
 
         expect(answer.body).to eq 'new body'
       end
 
       it 'redirects to updated question page' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question.id }
+        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question }
 
         expect(response).to redirect_to question
       end
     end
 
     context "with invalid attributes" do
-      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question.id } }
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question } }
 
       it 'does not change the answer' do
         question.reload
@@ -98,11 +98,11 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user_with_answers) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: user_with_answers.answers.first, question_id: question.id } }.to change(user_with_answers.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: user_with_answers.answers.first, question_id: question } }.to change(user_with_answers.answers, :count).by(-1)
       end
 
       it 'redirects to question page' do
-        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id }
+        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question }
 
         expect(response).to redirect_to question
       end
@@ -113,11 +113,11 @@ RSpec.describe AnswersController, type: :controller do
       before { login(third_person) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id } }.to_not change(user_with_answers.answers, :count)
+        expect { delete :destroy, params: { id: user_with_answers.answers.first , question_id: question } }.to_not change(user_with_answers.answers, :count)
       end
 
       it 'redirects to qeustion page' do
-        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question.id }
+        delete :destroy, params: { id: user_with_answers.answers.first , question_id: question }
 
         expect(response).to redirect_to question
       end

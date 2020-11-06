@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'author' do
       it 'renders edit view' do
         login(user_with_questions)
-        get :edit, params: { id: question.id }
+        get :edit, params: { id: question }
 
         expect(response).to render_template :edit
       end
@@ -84,7 +84,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to root page' do
         login(user)
-        get :edit, params: { id: question.id }
+        get :edit, params: { id: question }
         
         expect(response).to redirect_to root_path
       end
