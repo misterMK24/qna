@@ -1,1 +1,4 @@
 p= answer.body
+- if current_user&.is_author?(answer)
+  p= link_to 'Edit', edit_question_answer_path(answer, question_id: answer.question), id: 'edit_answer'
+  p= link_to 'Delete', question_answer_path(answer, question_id: answer.question), id: 'delete_answer', method: :delete

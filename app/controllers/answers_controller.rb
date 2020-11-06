@@ -13,11 +13,19 @@ class AnswersController < ApplicationController
     end
   end
 
+  def edit
+    if current_user.is_author?(answer)
+      render :edit
+    else
+      redirect_to root_path, notice: 'You are not author of this answer'
+    end
+  end
+
   def update
     if answer.update(answer_params)
-      redirect_to question, notice: 'Answer has been updated successfully'
+      redirect_to question, notice: 'Answer has been updated successfully.'
     else
-      render 'questions/show'
+      render :edit
     end
   end
   

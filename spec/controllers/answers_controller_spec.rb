@@ -34,6 +34,30 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'GET #edit' do
+    let(:user_with_qna) { create(:user, :with_question, :with_answer, amount: 1) }
+    let(:question) { user_with_qna.questions.first }
+    let(:answer) { user_with_qna.answers.first }
+
+    context 'author' do
+      it 'renders edit view' do
+        login(user_with_qna)
+        get :edit, params: { id: answer.id, question_id: question.id }
+
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'third person' do
+      it 'redirects to root page' do
+        login(user)
+        get :edit, params: { id: answer.id, question_id: question.id }
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
   describe 'PATCH #update' do
     before { login(user) }
 
@@ -61,8 +85,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(question.body).to eq 'Body'
       end
 
-      it 're-renders question page' do
-        expect(response).to render_template 'questions/show'
+      it 're-renders edit page' do
+        expect(response).to render_template :edit
       end
     end    
   end
