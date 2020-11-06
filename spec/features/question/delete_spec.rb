@@ -15,7 +15,7 @@ feature 'User can delete a question', %q{
       scenario 'author of question tries to delete an question' do
         sign_in(user_with_questions)
         visit question_path(question)
-        click_on 'Delete'
+        click_on 'delete_question'
 
         expect(page).to have_content 'Question has been successfully deleted'
       end
@@ -27,7 +27,7 @@ feature 'User can delete a question', %q{
         sign_in(user)
         visit question_path(question)
 
-        expect(page).to have_no_link('Delete')
+        expect(page).to have_no_link('delete_question')
       end
     end
   end
@@ -35,6 +35,6 @@ feature 'User can delete a question', %q{
   scenario 'Unauthenticated user tries to delete an question' do
     visit question_path(question)
 
-    expect(page).to have_no_link('Delete')
+    expect(page).to have_no_link('delete_question')
   end
 end

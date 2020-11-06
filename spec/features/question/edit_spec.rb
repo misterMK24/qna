@@ -16,7 +16,7 @@ feature 'User can edit question', %q{
         sign_in(user_with_question)
 
         visit question_path(question)
-        click_on 'Edit'
+        click_on 'edit_question'
       end
 
       scenario 'user edits a question' do
@@ -44,7 +44,7 @@ feature 'User can edit question', %q{
       scenario 'third person edits a question through show page' do
         visit question_path(question)
         
-        expect(page).to have_no_link('Edit')
+        expect(page).to have_no_link('edit_question')
       end
 
       scenario 'third person edits a question through edit page' do
@@ -58,10 +58,10 @@ feature 'User can edit question', %q{
   describe 'Unauthenticated user' do
     given(:question) { create(:question) }
 
-    scenario 'Unanthenticated user tries to ask a question' do
+    scenario 'Unanthenticated user tries to edit a question' do
       visit question_path(question)
 
-      expect(page).to have_no_link('Edit')
+      expect(page).to have_no_link('edit_question')
     end
   end
 end
