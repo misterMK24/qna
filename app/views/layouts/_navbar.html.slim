@@ -1,0 +1,4 @@
+nav.navbar
+  - if user_signed_in?
+    ul.navbar-nav.ml-auto
+      p= link_to 'Sign Out', destroy_user_session_path, method: :delete
