@@ -8,5 +8,4 @@ function editorLinkHandler(e) {
   var editForm = $('form#edit-answer-' + answerId)
   editForm.removeClass('d-none')
   $(this).addClass('d-none')
-  console.log(editForm)
 }
