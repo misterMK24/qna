@@ -1,16 +1,19 @@
+= javascript_pack_tag 'answers'
+
 = render 'shared/errors', resource: question
-- if flash[:error]
-  - flash[:error].each do |err|
-    = err
 
 h1= question.title
 p= question.body
 - if current_user&.is_author?(question)
   p= link_to 'Edit', edit_question_path(question), id: 'edit_question'
   p= link_to 'Delete', question_path(question), id: 'delete_question', method: :delete
+
 h2= pluralize(question.answers.count, 'Answer')
-div id='answers'
+.answer-errors
+.answers
   = render question.answers
-h3 Answer to a question
-= render 'answers/form', answer: question.answers.new
+
+- if user_signed_in?  
+    h3 Answer to a question
+    = render 'answers/form', answer: question.answers.new
 

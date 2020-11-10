@@ -1,0 +1,7 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+
+<% unless @answer.errors.present? %>
+  $('.answer_value[answer-id=<%= @answer.id %>]').text('<%= j @answer.body %>')
+  $('form#edit-answer-<%= answer.id %>').addClass('d-none')
+  $('.edit_answer[data-answer-id=<%= answer.id %>]').removeClass('d-none')
+<% end %>

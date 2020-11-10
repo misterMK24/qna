@@ -1,0 +1,6 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
+
+<% if @answer.persisted? %>
+  $('.answers').append('<%= j render @answer %>')
+  $("textarea[id='answer_body']:visible").val('')
+<% end %>
