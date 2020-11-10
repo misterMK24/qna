@@ -16,7 +16,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: 'js' }.to change(Answer, :count).by(1)
       end
 
-      it 'redirects to question page' do
+      it 'renders create.js' do
         post :create, params: { answer: attributes_for(:answer) , question_id: question, format: 'js' }
 
         expect(response).to render_template :create
@@ -29,7 +29,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: 'js' } }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question page' do
+      it 'renders create.js' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: 'js' }
 
         expect(response).to render_template :create
@@ -49,7 +49,7 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer.body).to eq 'new body'
         end
 
-        it 'redirects to updated question page' do
+        it 'renders update.js' do
           patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question, format: 'js' }
 
           expect(response).to render_template :update
@@ -65,7 +65,7 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer.body).to eq 'Body'
         end
 
-        it 're-renders edit page' do
+        it 'renders update.js' do
           expect(response).to render_template :update
         end
       end
@@ -91,18 +91,18 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
+  describe 'DELETE #destroy', js: true do
     context 'author' do
       before { login(user_with_answer) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: user_with_answer.answers.first, question_id: question } }.to change(user_with_answer.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: user_with_answer.answers.first, question_id: question }, format: 'js' }.to change(user_with_answer.answers, :count).by(-1)
       end
 
-      it 'redirects to question page' do
-        delete :destroy, params: { id: user_with_answer.answers.first , question_id: question }
+      it 'renders destroy.js' do
+        delete :destroy, params: { id: user_with_answer.answers.first , question_id: question }, format: 'js'
 
-        expect(response).to redirect_to question
+        expect(response).to render_template :destroy
       end
     end
 
@@ -111,7 +111,7 @@ RSpec.describe AnswersController, type: :controller do
       before { login(third_person) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: user_with_answer.answers.first , question_id: question } }.to_not change(user_with_answer.answers, :count)
+        expect { delete :destroy, params: { id: user_with_answer.answers.first , question_id: question }, format: 'js' }.to_not change(user_with_answer.answers, :count)
       end
 
       it 'redirects to qeustion page' do
