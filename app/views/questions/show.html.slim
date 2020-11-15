@@ -22,7 +22,7 @@
       = pluralize(question.answers.count, 'Answer')
     .answer-errors
     .best_answer
-        = render 'answers/best_answer', resource: @best_answer if @best_answer
+        = render @best_answer
     .d-flex.answers      
       = render @other_answers
 
