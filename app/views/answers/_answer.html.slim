@@ -3,10 +3,14 @@
     p.answer_value
       = answer.body
 
+    - if current_user&.is_author?(answer.question)
+      p= link_to 'Best', mark_best_question_path(id: answer.question.id, answer: answer), 
+                        remote: true, method: :patch, class: 'assign_best_answer'
+
     - if current_user&.is_author?(answer)
       p 
-        = link_to 'Edit', '#', class: 'edit_answer', data: { answer_id: answer.id }
-        = link_to 'Delete', answer, class: 'delete_answer', remote: true, method: :delete, class: 'ml-2'
+        = link_to 'Edit', '', class: 'edit_answer', data: { answer_id: answer.id }
+        = link_to 'Delete', answer, remote: true, method: :delete, class: 'ml-2 delete_answer'
 
       = form_with model: answer,  class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
         p= f.label :body

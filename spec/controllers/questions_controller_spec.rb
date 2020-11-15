@@ -125,6 +125,47 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'PATCH #mark_best', js: true do
+    let(:question) { create(:question, :with_answer) }
+    let(:answer) { question.answers.first }
+    
+    context 'author' do
+      let(:user_with_question) { question.user }
+  
+      before do
+        login(user_with_question)
+        patch :mark_best, params: { id: question, question: { best_answer_id: answer.id } }, format: 'js'
+      end
+
+      it 'marks a specified answer as the best' do
+        question.reload
+
+        expect(question.best_answer).to eq answer
+      end
+
+      it 'renders mark_best.js' do
+        expect(response).to render_template :mark_best
+      end
+    end
+  
+    context 'third person' do
+      before do
+        login(user)
+        patch :mark_best, params: { id: question, question: { best_answer_id: answer.id } }, format: 'js'
+      end
+
+      it 'does not change the question' do
+        question.reload
+
+        expect(question.best_answer).to eq nil
+      end
+
+      it 'redirects to root page' do
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:user_with_questions) { create(:user, :with_question, amount: 1) }
     let(:question) { user_with_questions.questions.first }
