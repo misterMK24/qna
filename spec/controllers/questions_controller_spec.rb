@@ -134,7 +134,7 @@ RSpec.describe QuestionsController, type: :controller do
   
       before do
         login(user_with_question)
-        patch :mark_best, params: { id: question, question: { best_answer_id: answer.id } }, format: 'js'
+        patch :mark_best, params: { id: question, answer: answer.id }, format: 'js'
       end
 
       it 'marks a specified answer as the best' do
