@@ -12,13 +12,16 @@ feature 'User can sign up', %q{
     fill_in 'Email',	with: 'test@mail.com'
     fill_in 'Password', with: '123456'
     fill_in 'Password confirmation', with: '123456'
-    click_on 'Sign up'
-    
+    within('.new_user') do
+      click_on 'Sign up'
+    end
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
 
   scenario 'without Email and password' do
-    click_on 'Sign up'
+    within('.new_user') do
+      click_on 'Sign up'
+    end
 
     expect(page).to have_content "Email can't be blank"
     expect(page).to have_content "Password can't be blank"
@@ -28,7 +31,9 @@ feature 'User can sign up', %q{
     fill_in 'Email',	with: 'test@mail.com'
     fill_in 'Password', with: '123'
     fill_in 'Password confirmation', with: '123'
-    click_on 'Sign up'
+    within('.new_user') do
+      click_on 'Sign up'
+    end
 
     expect(page).to have_content 'Password is too short'
   end
