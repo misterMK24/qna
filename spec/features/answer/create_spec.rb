@@ -11,7 +11,7 @@ feature 'User can post an answer', %q{
   given!(:question) { create(:question, :with_answer, amount: 1) }
   given(:answer) { create(:answer) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
       visit question_path(question)
@@ -21,8 +21,7 @@ feature 'User can post an answer', %q{
       fill_in 'Body', with: answer.body
       click_on 'Post'
 
-      expect(page).to have_content answer.body
-      expect(page).to have_content 'Answer has been posted successfully'
+      expect(page).to have_css('.answers', count: question.answers.length)
     end
 
     scenario 'user answers to a question with errors' do
@@ -34,10 +33,7 @@ feature 'User can post an answer', %q{
 
   scenario 'Unanthenticated user tries to answer to a question' do
     visit question_path(question)
-    
-    fill_in 'Body', with: answer.body
-    click_on 'Post'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_no_link('Post')
   end
 end

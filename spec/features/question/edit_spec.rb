@@ -7,33 +7,39 @@ feature 'User can edit question', %q{
   I'd like to be able to edit the question
 } do
 
-  describe 'Authenticated user' do
-    given(:user_with_question) { create(:user, :with_question, amount: 1) }
-    given(:question) { user_with_question.questions.first }
+  describe 'Authenticated user', js: true do
+    given(:question) { create(:question) }
+    given(:user_with_question) { question.user }
 
     context 'auhtor' do
       background do
         sign_in(user_with_question)
 
         visit question_path(question)
-        click_on 'edit_question'
+        within('.questions') do
+          click_on 'Edit'
+        end
       end
 
       scenario 'user edits a question' do
-        fill_in 'Title', with: 'Test question'
-        fill_in 'Body', with: 'text text text'
-        click_on 'Save'
+        within('.questions') do
+          fill_in 'Title', with: 'new question title'
+          fill_in 'Body', with: 'text text text'
+          click_on 'Save'
 
-        expect(page).to have_content 'Your quesion has been successfully updated.'
-        expect(page).to have_content 'Test question'
-        expect(page).to have_content 'text text text'
+          expect(page).to have_content 'new question title'
+          expect(page).to have_content 'text text text'
+          expect(page).to have_link 'Edit'
+        end
       end
 
       scenario 'user edits a question with errors' do
-        fill_in 'Title', with: ''
-        click_on 'Save'
+        within('.questions') do
+          fill_in 'Body', with: ''
+          click_on 'Save'
 
-        expect(page).to have_content "Title can't be blank"
+          expect(page).to have_content "Body can't be blank"
+        end
       end
     end
   
@@ -44,13 +50,9 @@ feature 'User can edit question', %q{
       scenario 'third person edits a question through show page' do
         visit question_path(question)
         
-        expect(page).to have_no_link('edit_question')
-      end
-
-      scenario 'third person edits a question through edit page' do
-        visit edit_question_path(question)
-
-        expect(page).to have_content 'You are not author of this question'
+        within('.questions') do
+          expect(page).to have_no_link('Edit')
+        end
       end
     end
   end
@@ -61,7 +63,9 @@ feature 'User can edit question', %q{
     scenario 'Unanthenticated user tries to edit a question' do
       visit question_path(question)
 
-      expect(page).to have_no_link('edit_question')
+      within('.questions') do
+        expect(page).to have_no_link('Edit')
+      end
     end
   end
 end

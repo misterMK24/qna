@@ -1,0 +1,11 @@
+<% unless question.best_answer == @old_best_answer %>
+  $('.each_answer').find('.answer[answer-id=<%= question.best_answer.id %>]').parent().remove()
+  $('<%= j render question.best_answer %>').appendTo('.best_answer')
+  $('.answer[answer-id=<%= question.best_answer.id %>]').find('.assign_best_answer').addClass('d-none')
+  
+  <% unless @old_best_answer.nil? %>
+    $('.each_answer').find('.answer[answer-id=<%= @old_best_answer.id %>]').parent().remove()
+    $('<%= j render @old_best_answer %>').appendTo('.answers')
+    $('.answer[answer-id=<%= question.best_answer.id %>]').find('.assign_best_answer').addClass('d-none')
+  <% end %>
+<% end %>

@@ -66,32 +66,7 @@ RSpec.describe QuestionsController, type: :controller do
     end    
   end
 
-  describe 'GET #edit' do
-    let(:user_with_questions) { create(:user, :with_question, amount: 1) }
-    let(:question) { user_with_questions.questions.first }
-
-    context 'author' do
-      it 'renders edit view' do
-        login(user_with_questions)
-        get :edit, params: { id: question }
-
-        expect(response).to render_template :edit
-      end
-    end
-
-    context 'third person' do
-      let(:user) { create(:user) }
-
-      it 'redirects to root page' do
-        login(user)
-        get :edit, params: { id: question }
-        
-        expect(response).to redirect_to root_path
-      end
-    end
-  end
-
-  describe 'PATCH #update' do
+  describe 'PATCH #update', js: true do
     let(:user_with_questions) { create(:user, :with_question, amount: 1) }
     let(:question) { user_with_questions.questions.first }
 
@@ -100,22 +75,23 @@ RSpec.describe QuestionsController, type: :controller do
 
       context "with valid attributes" do
         it 'update question attributes' do
-          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }  
+          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: 'js'  
           question.reload
 
           expect(question.title).to eq 'new title'
           expect(question.body).to eq 'new body'
         end
 
-        it 'redirects to updated question' do
-          patch :update, params: { id: question, question: attributes_for(:question) }
-          expect(response).to redirect_to question
+        it 'renders update.js' do
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: 'js'
+
+          expect(response).to render_template :update
         end
 
       end
 
       context "with invalid attributes" do
-        before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+        before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: 'js' }
 
         it 'does not change the question' do
           question.reload
@@ -124,8 +100,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect(question.body).to eq 'Body'
         end
 
-        it 're-renders edit view' do
-          expect(response).to render_template :edit
+        it 'renders update.js' do
+          expect(response).to render_template :update
         end
       end
     end
@@ -133,7 +109,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'third person' do
       before do
         login(user)
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: 'js'
       end
       
       it 'does not change the question' do
@@ -141,6 +117,47 @@ RSpec.describe QuestionsController, type: :controller do
 
         expect(question.title).to eq 'Title'
         expect(question.body).to eq 'Body'
+      end
+
+      it 'redirects to root page' do
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe 'PATCH #mark_best', js: true do
+    let(:question) { create(:question, :with_answer) }
+    let(:answer) { question.answers.first }
+    
+    context 'author' do
+      let(:user_with_question) { question.user }
+  
+      before do
+        login(user_with_question)
+        patch :mark_best, params: { id: question, answer: answer.id }, format: 'js'
+      end
+
+      it 'marks a specified answer as the best' do
+        question.reload
+
+        expect(question.best_answer).to eq answer
+      end
+
+      it 'renders mark_best.js' do
+        expect(response).to render_template :mark_best
+      end
+    end
+  
+    context 'third person' do
+      before do
+        login(user)
+        patch :mark_best, params: { id: question, question: { best_answer_id: answer.id } }, format: 'js'
+      end
+
+      it 'does not change the question' do
+        question.reload
+
+        expect(question.best_answer).to eq nil
       end
 
       it 'redirects to root page' do

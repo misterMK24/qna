@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @best_answer = question.best_answer
+    @other_answers = question.answers.where.not(id: question.best_answer_id)
   end
 
   def new
@@ -31,11 +33,16 @@ class QuestionsController < ApplicationController
 
   def update
     if current_user.is_author?(question)
-      if question.update(question_params)
-        redirect_to question, notice: 'Your quesion has been successfully updated.'
-      else
-        render :edit
-      end
+      question.update(question_params)
+    else
+      redirect_to root_path, notice: 'You are not author of this question'
+    end
+  end
+  
+  def mark_best
+    if current_user.is_author?(question)
+      @old_best_answer = question.best_answer
+      question.mark_as_best(params[:answer])
     else
       redirect_to root_path, notice: 'You are not author of this question'
     end
@@ -59,6 +66,6 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :best_answer_id)
   end
 end

@@ -1,12 +1,10 @@
-div.row
-  div.col-4
-    div.ml-4
-      h1 Some Panel
-  div.col-6
-    div.d-flex.main_align
-      h1 All questions
-      div.ml-auto
+.row
+  .col-3.main_align
+    h1 Some Panel
+  .col-7
+    .d-flex
+      h1 All Questions
+      .main_btn
         p= link_to 'Ask question', new_question_path, class: 'btn btn-info'
-    div.d-flex
-      div id='questions'
-        = render @questions
+    .d-flex.questions#questions
+      = render @questions

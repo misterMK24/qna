@@ -1,16 +1,32 @@
-= render 'shared/errors', resource: question
-- if flash[:error]
-  - flash[:error].each do |err|
-    = err
+= javascript_pack_tag 'answers'
+= javascript_pack_tag 'questions'
 
-h1= question.title
-p= question.body
-- if current_user&.is_author?(question)
-  p= link_to 'Edit', edit_question_path(question), id: 'edit_question'
-  p= link_to 'Delete', question_path(question), id: 'delete_question', method: :delete
-h2= pluralize(question.answers.count, 'Answer')
-div id='answers'
-  = render question.answers
-h3 Answer to a question
-= render 'answers/form', answer: question.answers.new
+.row
+  .col-3.main_align
+    h1 Some Panel
+  .col-7
+    .questions
+      .row.question_title
+        h3= question.title
+      .row
+        .question-errors
+        - if current_user&.is_author?(question)
+          p.ml-auto 
+            = link_to 'Edit', edit_question_path(question), class: 'btn btn-info edit_question'
+            = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
+      .row.mb-4.question_body
+        h4= question.body
+      .row
+        = render 'form'
+    h2.answers_count.mb-4
+      = pluralize(question.answers.count, 'Answer')
+    .answer-errors
+    .best_answer
+        = render @best_answer if @best_answer
+    .d-flex.answers      
+      = render @other_answers
+
+    - if user_signed_in?  
+        h3 Answer to a question
+        = render 'answers/form', answer: question.answers.new
 

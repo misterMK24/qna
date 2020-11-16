@@ -12,14 +12,17 @@ feature 'User can delete an answer', %q{
   given(:user) { answer.user }
   given(:question) { answer.question }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     context 'author' do
-      scenario 'author of answer tries to delete an answer' do
+      scenario 'tries to delete an answer' do
         sign_in(user)
         visit question_path(question)
-        click_on 'delete_answer'
 
-        expect(page).to have_content 'Answer has been successfully deleted'
+        within('.answers') do
+          click_on 'Delete'
+        
+          expect(page).to_not have_content answer.body
+        end
       end
     end
 
@@ -30,7 +33,9 @@ feature 'User can delete an answer', %q{
         sign_in(user)
         visit question_path(question)
 
-        expect(page).to have_no_link('delete_answer')
+        within('.answers') do
+          expect(page).to have_no_link('Delete')
+        end
       end
     end
   end
@@ -38,6 +43,8 @@ feature 'User can delete an answer', %q{
   scenario 'Unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
-    expect(page).to have_no_link('delete_answer')
+    within('.answers') do
+      expect(page).to have_no_link('Delete')
+    end
   end
 end

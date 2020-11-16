@@ -7,7 +7,7 @@ feature 'User can edit an answer', %q{
   I'd like to be able to edit the answer
 } do
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:answer) { create(:answer) }
     given(:user_with_answer) { answer.user }
     given(:question) { answer.question }
@@ -17,22 +17,30 @@ feature 'User can edit an answer', %q{
         sign_in(user_with_answer)
 
         visit question_path(question)
-        click_on 'edit_answer'
+        within('.answers') do
+          click_link('Edit')
+        end
       end
 
       scenario 'user edits an answer' do
-        fill_in 'Body', with: 'text text text'
-        click_on 'Save'
+        within('.answers') do
+          fill_in 'Body', with: 'text text text'
+          click_on 'Save'
 
-        expect(page).to have_content 'Answer has been updated successfully.'
-        expect(page).to have_content 'text text text'
+          expect(page).to_not have_content answer.body
+          expect(page).to have_content 'text text text'
+          expect(page).to_not have_selector 'textarea'
+        end
       end
 
       scenario 'user edits an answer with errors' do
-        fill_in 'Body', with: ''
-        click_on 'Save'
-
-        expect(page).to have_content "Body can't be blank"
+        within('.answers') do
+          fill_in 'Body', with: ''
+          click_on 'Save'
+        end
+        within('.answer-errors') do
+          expect(page).to have_content "Body can't be blank"
+        end
       end
     end
   
@@ -40,16 +48,12 @@ feature 'User can edit an answer', %q{
       given(:user) { create(:user) }
       background { sign_in(user) }
 
-      scenario 'third person edits an answer through show page' do
+      scenario 'third person edits an answer' do
         visit question_path(question)
         
-        expect(page).to have_no_link('edit_answer')
-      end
-
-      scenario 'third person edits an answer through edit page' do
-        visit edit_question_answer_path(answer, question_id: question)
-
-        expect(page).to have_content 'You are not author of this answer'
+        within('.answers') do
+          expect(page).to have_no_link('Edit')
+        end
       end
     end
   end
@@ -61,7 +65,9 @@ feature 'User can edit an answer', %q{
     scenario 'Unanthenticated user tries to edit an answer' do
       visit question_path(question)
 
-      expect(page).to have_no_link('edit_answer')
+      within('.answers') do
+        expect(page).to have_no_link('Edit')
+      end
     end
   end
 end

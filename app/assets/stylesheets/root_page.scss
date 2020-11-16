@@ -1,10 +1,22 @@
 .main_align {
-  align-items: flex-end;
+  align-items: baseline;
+  word-wrap: break-word;
+  // padding-left: 200px;
+}
+
+.main_btn {
+  // padding-left: 200px;
+  margin-left: auto;
+}
+
+.left_panel {
+  flex-flow: column;
 }
 
 .questions {
+  flex-direction: column;
+  align-items: stretch;
+  // height: max-content;
 }
 
-.question {
-  
-}
+

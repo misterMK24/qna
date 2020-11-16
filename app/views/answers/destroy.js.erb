@@ -1,0 +1,4 @@
+<% unless @answer.persisted? %>
+  $('.answer[answer-id=<%= answer.id %>]').remove()
+  $('.answers_count').text('<%= j pluralize(@answer.question.answers.count, 'Answer') %>')
+<% end %>
