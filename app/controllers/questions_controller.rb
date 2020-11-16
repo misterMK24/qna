@@ -60,12 +60,12 @@ class QuestionsController < ApplicationController
   private
 
   def question
-    @question ||= Question.find(params[:id])
+    @question ||= Question.with_attached_files.find(params[:id])
   end
 
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id)
+    params.require(:question).permit(:title, :body, :best_answer_id, files: [])
   end
 end

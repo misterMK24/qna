@@ -17,6 +17,11 @@
       .row.mb-4.question_body
         h4= question.body
       .row
+        - if question.files.attached?
+          h8 Attached files:
+          - question.files.each do |file| 
+            p= link_to file.filename.to_s, url_for(file), class: 'btn-sm' 
+      .row
         = render 'form'
     h2.answers_count.mb-4
       = pluralize(question.answers.count, 'Answer')
