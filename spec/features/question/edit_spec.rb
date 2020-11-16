@@ -23,13 +23,13 @@ feature 'User can edit question', %q{
 
       scenario 'user edits a question' do
         within('.questions') do
-            fill_in 'Title', with: 'new question title'
-            fill_in 'Body', with: 'text text text'
-            click_on 'Save'
+          fill_in 'Title', with: 'new question title'
+          fill_in 'Body', with: 'text text text'
+          click_on 'Save'
 
-            expect(page).to have_content 'new question title'
-            expect(page).to have_content 'text text text'
-            expect(page).to have_link 'Edit'
+          expect(page).to have_content 'new question title'
+          expect(page).to have_content 'text text text'
+          expect(page).to have_link 'Edit'
         end
       end
 

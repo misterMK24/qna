@@ -10,7 +10,6 @@ feature 'Question author can mark bset answer', %q{
   given!(:answer) { create(:answer, body: "Best", question: question) }
 
   describe 'Authenticated user', js: true do
-    
     context 'auhtor' do
       given!(:user_with_question) { question.user }
 

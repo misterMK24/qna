@@ -12,9 +12,11 @@ feature 'User can sign up', %q{
     fill_in 'Email',	with: 'test@mail.com'
     fill_in 'Password', with: '123456'
     fill_in 'Password confirmation', with: '123456'
+    
     within('.new_user') do
       click_on 'Sign up'
     end
+    
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
 
@@ -31,6 +33,7 @@ feature 'User can sign up', %q{
     fill_in 'Email',	with: 'test@mail.com'
     fill_in 'Password', with: '123'
     fill_in 'Password confirmation', with: '123'
+
     within('.new_user') do
       click_on 'Sign up'
     end

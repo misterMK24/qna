@@ -6,6 +6,6 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
   
   def mark_as_best(answer)
-		self.update(best_answer_id: answer)
-	end
+	  self.update(best_answer_id: answer)
+  end
 end

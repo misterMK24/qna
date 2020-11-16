@@ -22,6 +22,7 @@ feature 'User can delete a question', %q{
         expect(page).to have_content 'Question has been successfully deleted'
       end
     end
+    
     context 'third person' do
       given(:user) { create(:user) }
 
