@@ -22,7 +22,7 @@ feature 'User can edit an answer', %q{
         end
       end
 
-      scenario 'user edits an answer' do
+      scenario 'edits an answer' do
         within('.answers') do
           fill_in 'Body', with: 'text text text'
           click_on 'Save'
@@ -33,7 +33,7 @@ feature 'User can edit an answer', %q{
         end
       end
 
-      scenario 'user edits an answer with errors' do
+      scenario 'edits an answer with errors' do
         within('.answers') do
           fill_in 'Body', with: ''
           click_on 'Save'
@@ -42,13 +42,29 @@ feature 'User can edit an answer', %q{
           expect(page).to have_content "Body can't be blank"
         end
       end
+
+      scenario 'edits an answer with attached files' do
+        within(:xpath, ".//div[@answer-id='#{answer.id}']") do
+          fill_in "Body",	with: 'text text text'
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          
+          click_on 'Save'
+          
+          expect(page).to_not have_content answer.body
+          expect(page).to have_content 'text text text'
+          expect(page).to_not have_selector 'textarea'
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+        end
+
+      end
     end
   
     context 'third person' do
       given(:user) { create(:user) }
       background { sign_in(user) }
 
-      scenario 'third person edits an answer' do
+      scenario 'edits an answer' do
         visit question_path(question)
         
         within('.answers') do
@@ -62,7 +78,7 @@ feature 'User can edit an answer', %q{
     given(:answer) { create(:answer) }
     given(:question) { answer.question }
 
-    scenario 'Unanthenticated user tries to edit an answer' do
+    scenario 'tries to edit an answer' do
       visit question_path(question)
 
       within('.answers') do

@@ -5,6 +5,7 @@ $('.question-errors').html('<%= render 'shared/errors', resource: question %>');
   $('.question_body').html('<h4><%= question.body %></h4>')
   
   let attached_files_class = document.getElementsByClassName('attached_files')[0]
+  
   if (attached_files_class.querySelector('h8')) {
     let files = attached_files_class.querySelectorAll('p')
     files.forEach(function(currentValue, currentIndex, listObj) { attached_files_class.removeChild(currentValue) })

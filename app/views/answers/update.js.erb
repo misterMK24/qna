@@ -2,6 +2,25 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% unless @answer.errors.present? %>
   $('.answer[answer-id=<%= @answer.id %>]').find('.answer_value').text('<%= j @answer.body %>')
+  
+  let current_answer = document.querySelector('.answer[answer-id="<%= @answer.id %>"]')
+  let attached_files = current_answer.querySelector('.attached_files')
+  
+  if (current_answer.querySelector('h8')) {
+    let files = attached_files.querySelectorAll('a.attachment')
+    files.forEach(function(currentValue, currentIndex, listObj) { attached_files.removeChild(currentValue) })
+  } else {
+    attached_files.insertAdjacentHTML('beforeend', '<h8>Attached files: <h8>')
+  }  
+  
+  updateAllFiles()
+  
   $('form#edit-answer-<%= answer.id %>').addClass('d-none')
   $('.edit_answer[data-answer-id=<%= answer.id %>]').removeClass('d-none')
 <% end %>
+
+function updateAllFiles() {
+  <% @answer.files.each do |file| %>
+    attached_files.insertAdjacentHTML('beforeend', '<%=link_to file.filename.to_s, url_for(file), class: "btn-sm" %>')
+  <% end %>
+}
