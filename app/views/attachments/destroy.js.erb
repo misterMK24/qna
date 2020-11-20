@@ -1,0 +1,9 @@
+<% if @attachment.destroyed? %>
+  var file = document.querySelector('.questions .file[file-id="<%= @attachment.id %>"]')
+  var parent = file.parentElement
+  parent.removeChild(file)
+  var header = parent.querySelector('h8')
+  <% if @attachment.record.files.count.zero? %>
+    parent.removeChild(header)
+  <% end %>
+<% end %>

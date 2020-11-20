@@ -16,11 +16,14 @@
             = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
       .row.mb-4.question_body
         h4= question.body
+      / move .attached_files to partial
       .row.attached_files
         - if question.files.attached?
           h8 Attached files:
           - question.files.each do |file| 
-            p= link_to file.filename.to_s, url_for(file), class: 'btn-sm' 
+            .file*{'file-id' => file.id}
+              = link_to file.filename.to_s, url_for(file), class: 'ml-2'
+              | (#{link_to 'delete', attachment_path(file), remote: true, method: :delete})
       .row
         = render 'form'
     h2.answers_count.mb-4

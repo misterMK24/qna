@@ -5,7 +5,7 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
   
   let current_answer = document.querySelector('.answer[answer-id="<%= @answer.id %>"]')
   let attached_files = current_answer.querySelector('.attached_files')
-  
+  // TODO: Add 'delete' link for attachment
   if (current_answer.querySelector('h8')) {
     let files = attached_files.querySelectorAll('a.attachment')
     files.forEach(function(currentValue, currentIndex, listObj) { attached_files.removeChild(currentValue) })
