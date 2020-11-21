@@ -2,5 +2,5 @@
   = f.label :body
   p= f.text_area :body
   = f.label :files
-  p= f.file_field :files, multiple: true
+  p= f.file_field :files, multiple: true, direct_upload: true
   = f.submit 'Post'

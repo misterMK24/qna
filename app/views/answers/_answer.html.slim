@@ -17,5 +17,5 @@
       = f.label :body
       p= f.text_area :body
       = f.label :files, class: 'mr-2'
-      p= f.file_field :files, multiple: true
+      p= f.file_field :files, multiple: true, direct_upload: true
       = f.submit 'Save', class: 'my-2'
