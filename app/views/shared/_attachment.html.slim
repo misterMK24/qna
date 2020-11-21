@@ -1,0 +1,8 @@
+.row.attached_files
+  - if resource.files.attached?
+    h8 Attached files:
+    - resource.files.each do |file| 
+      .file*{'file-id' => file.id}
+        = link_to file.filename.to_s, url_for(file), class: 'ml-2'
+        - if current_user&.is_author?(resource)
+          | (#{link_to 'delete', attachment_path(file), remote: true, method: :delete})

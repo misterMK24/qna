@@ -4,37 +4,31 @@
 .row
   .col-3.main_align
     h1 Some Panel
-  .col-7
+  .col-9
     .questions
-      .row.question_title
-        h3= question.title
       .row
-        .question-errors
-        - if current_user&.is_author?(question)
-          p.ml-auto 
-            = link_to 'Edit', edit_question_path(question), class: 'btn btn-info edit_question'
-            = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
+        .col.question_title
+          h3= question.title
+          .question-errors
+        .col.buttons
+          - if current_user&.is_author?(question)
+            p 
+              = link_to 'Edit', edit_question_path(question), class: 'btn btn-info edit_question'
+              = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
       .row.mb-4.question_body
         h4= question.body
-      / move .attached_files to partial
-      .row.attached_files
-        - if question.files.attached?
-          h8 Attached files:
-          - question.files.each do |file| 
-            .file*{'file-id' => file.id}
-              = link_to file.filename.to_s, url_for(file), class: 'ml-2'
-              | (#{link_to 'delete', attachment_path(file), remote: true, method: :delete})
+      = render 'shared/attachment', resource: question
       .row
         = render 'form'
-    h2.answers_count.mb-4
+    h2.answers_count.my-4
       = pluralize(question.answers.count, 'Answer')
     .answer-errors
     .best_answer
-        = render @best_answer if @best_answer
+      = render @best_answer if @best_answer
     .d-flex.answers      
       = render @other_answers
-
     - if user_signed_in?  
-        h3 Answer to a question
+      h3 Answer to a question
+      .row
         = render 'answers/form', answer: question.answers.new
 

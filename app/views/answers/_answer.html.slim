@@ -1,15 +1,9 @@
-.row.each_answer
+.each_answer
   .answer*{'answer-id' => answer.id}
-    h5.answer_value
-      = answer.body
-    
-    / move attached_files class to partial
-    .attached_files
-      - if answer.files.attached?
-        h8 Attached files:
-        - answer.files.each do |file| 
-          = link_to file.filename.to_s, url_for(file), class: 'attachment btn-sm' 
-    
+    .row
+      h5.answer_value
+        = answer.body
+    = render 'shared/attachment', resource: answer
     p  
       - if current_user&.is_author?(answer.question) && question.best_answer != answer
         = link_to 'Best', mark_best_question_path(id: answer.question.id, answer: answer), 

@@ -3,24 +3,38 @@ $('.question-errors').html('<%= render 'shared/errors', resource: question %>');
 <% unless question.errors.present? %>
   $('.question_title').html('<h3><%= question.title %></h3>')
   $('.question_body').html('<h4><%= question.body %></h4>')
-  
-  let attached_files_class = document.getElementsByClassName('attached_files')[0]
-  
-  if (attached_files_class.querySelector('h8')) {
-    let files = attached_files_class.querySelectorAll('p')
-    files.forEach(function(currentValue, currentIndex, listObj) { attached_files_class.removeChild(currentValue) })
-  } else {
-    attached_files_class.insertAdjacentHTML('beforeend', '<h8>Attached files: <h8>')
-  }
   updateAllFiles()
   $('form#question_edit').addClass('d-none')
   $('.edit_question').removeClass('d-none')
 <% end %>
 
-// TODO: make actions with attached files in separated function
-
 function updateAllFiles() {
-  <% question.files.each do |file| %>
-    attached_files_class.insertAdjacentHTML('beforeend', '<p><%=link_to file.filename.to_s, url_for(file), class: "btn-sm" %></p>')
+  <% if question.files.present? %>
+    let current_question = document.querySelector('.questions')
+    let attached_files = current_question.querySelector('.attached_files')
+    let files = attached_files.querySelectorAll('.file')
+    
+    if (!attached_files.querySelector('h8')) {
+      attached_files.insertAdjacentHTML('beforeend', '<h8>Attached files: <h8>')
+    }
+
+    <% question.files.each do |file| %>
+      if (!attached_files.querySelector('.file[file-id="<%= file.id %>"]')) {
+        var elem = process_file_elem("<%= file.id %>")
+        elem.insertAdjacentHTML('beforeend', '<%= link_to_file(file) %>')
+        elem.insertAdjacentHTML('beforeend', '(<%= link_delete_file(file) %>)')
+        attached_files.insertAdjacentElement('beforeend', elem)
+      }
+    <% end %>
   <% end %>
+}
+
+function process_file_elem(file) {
+  var elem = document.createElement('div')
+  elem.className += 'file'
+  att = document.createAttribute('file-id')
+  att.value = file
+  elem.setAttributeNode(att)
+
+  return elem
 }
