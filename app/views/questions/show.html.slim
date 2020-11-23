@@ -18,6 +18,11 @@
       .row.mb-4.question_body
         h4= question.body
       = render 'shared/attachment', resource: question
+      .row.question_links
+        - if question.links.exists?
+          p Links:
+          - question.links.each do |link|
+            = link_to link.name, link.url
       .row
         = render 'form'
     h2.answers_count.my-4
@@ -30,5 +35,5 @@
     - if user_signed_in?  
       h3 Answer to a question
       .row
-        = render 'answers/form', answer: question.answers.new
+        = render 'answers/form', answer: @answer
 

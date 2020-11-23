@@ -3,6 +3,11 @@
     .row
       h5.answer_value
         = answer.body
+    .row
+      - if answer.links.exists?
+        p Links:
+        - answer.links.each do |link|
+          = link_to link.name, link.url
     = render 'shared/attachment', resource: answer
     p  
       - if current_user&.is_author?(answer.question) && question.best_answer != answer

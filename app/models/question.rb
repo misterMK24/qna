@@ -1,5 +1,6 @@
 class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
+  has_many :links, as: :linkable, dependent: :destroy
   belongs_to :user, foreign_key: 'user_id'
   belongs_to :best_answer, class_name: 'Answer', optional: true
   
@@ -7,6 +8,8 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
   
+  accepts_nested_attributes_for :links, reject_if: :all_blank
+
   def mark_as_best(answer)
     self.update(best_answer_id: answer)
   end
