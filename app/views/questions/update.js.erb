@@ -3,6 +3,38 @@ $('.question-errors').html('<%= render 'shared/errors', resource: question %>');
 <% unless question.errors.present? %>
   $('.question_title').html('<h3><%= question.title %></h3>')
   $('.question_body').html('<h4><%= question.body %></h4>')
+  updateAllFiles()
   $('form#question_edit').addClass('d-none')
   $('.edit_question').removeClass('d-none')
 <% end %>
+
+function updateAllFiles() {
+  <% if question.files.present? %>
+    let current_question = document.querySelector('.questions')
+    let attached_files = current_question.querySelector('.attached_files')
+    let files = attached_files.querySelectorAll('.file')
+    
+    if (!attached_files.querySelector('h8')) {
+      attached_files.insertAdjacentHTML('beforeend', '<h8>Attached files: <h8>')
+    }
+
+    <% question.files.each do |file| %>
+      if (!attached_files.querySelector('.file[file-id="<%= file.id %>"]')) {
+        var elem = process_file_elem("<%= file.id %>")
+        elem.insertAdjacentHTML('beforeend', '<%= link_to_file(file) %>')
+        elem.insertAdjacentHTML('beforeend', '(<%= link_delete_file(file) %>)')
+        attached_files.insertAdjacentElement('beforeend', elem)
+      }
+    <% end %>
+  <% end %>
+}
+
+function process_file_elem(file) {
+  var elem = document.createElement('div')
+  elem.className += 'file'
+  att = document.createAttribute('file-id')
+  att.value = file
+  elem.setAttributeNode(att)
+
+  return elem
+}

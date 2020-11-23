@@ -1,18 +1,21 @@
-.row.each_answer
+.each_answer
   .answer*{'answer-id' => answer.id}
-    p.answer_value
-      = answer.body
+    .row
+      h5.answer_value
+        = answer.body
+    = render 'shared/attachment', resource: answer
+    p  
+      - if current_user&.is_author?(answer.question) && question.best_answer != answer
+        = link_to 'Best', mark_best_question_path(id: answer.question.id, answer: answer), 
+                          remote: true, method: :patch, class: 'assign_best_answer'
 
-    - if current_user&.is_author?(answer.question) && question.best_answer != answer
-      p= link_to 'Best', mark_best_question_path(id: answer.question.id, answer: answer), 
-                        remote: true, method: :patch, class: 'assign_best_answer'
-
-    - if current_user&.is_author?(answer)
-      p 
-        = link_to 'Edit', '', class: 'edit_answer', data: { answer_id: answer.id }
+      - if current_user&.is_author?(answer) 
+        = link_to 'Edit', '', class: 'ml-2 edit_answer', data: { answer_id: answer.id }
         = link_to 'Delete', answer, remote: true, method: :delete, class: 'ml-2 delete_answer'
 
-      = form_with model: answer,  class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
-        p= f.label :body
-        = f.text_area :body
-        = f.submit 'Save'
+    = form_with model: answer,  class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
+      = f.label :body
+      p= f.text_area :body
+      = f.label :files, class: 'mr-2'
+      p= f.file_field :files, multiple: true, direct_upload: true
+      = f.submit 'Save', class: 'my-2'

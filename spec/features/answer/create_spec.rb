@@ -9,7 +9,7 @@ feature 'User can post an answer', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question, :with_answer, amount: 1) }
-  given(:answer) { create(:answer) }
+  given!(:answer) { create(:answer) }
 
   describe 'Authenticated user', js: true do
     background do
@@ -17,17 +17,29 @@ feature 'User can post an answer', %q{
       visit question_path(question)
     end
 
-    scenario 'user answers to a question with valid attribute' do
+    scenario 'answers to a question with valid attribute' do
       fill_in 'Body', with: answer.body
       click_on 'Post'
 
       expect(page).to have_css('.answers', count: question.answers.length)
     end
 
-    scenario 'user answers to a question with errors' do
+    scenario 'answers to a question with errors' do
       click_on 'Post'
     
       expect(page).to have_content "Body can't be blank"
+    end
+
+    scenario 'answers to a question with attached files' do
+      fill_in 'Body', with: 'text text text'
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Post'
+      
+      within(:xpath, ".//div[@answer-id='#{answer.id + 1}']") do
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
     end
   end
 

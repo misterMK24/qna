@@ -2,6 +2,38 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% unless @answer.errors.present? %>
   $('.answer[answer-id=<%= @answer.id %>]').find('.answer_value').text('<%= j @answer.body %>')
+  updateAllFiles()
   $('form#edit-answer-<%= answer.id %>').addClass('d-none')
   $('.edit_answer[data-answer-id=<%= answer.id %>]').removeClass('d-none')
 <% end %>
+
+function updateAllFiles() {
+  <% if @answer.files.present? %>
+    let current_answer = document.querySelector('.answer[answer-id="<%= @answer.id %>"]')
+    let attached_files = current_answer.querySelector('.attached_files')
+    let files = attached_files.querySelectorAll('.file')
+    
+    if (!attached_files.querySelector('h8')) {
+      attached_files.insertAdjacentHTML('beforeend', '<h8>Attached files: <h8>')
+    }
+
+    <% @answer.files.each do |file| %>
+      if (!attached_files.querySelector('.file[file-id="<%= file.id %>"]')) {
+        var elem = process_file_elem("<%= file.id %>")
+        elem.insertAdjacentHTML('beforeend', '<%= link_to_file(file) %>')
+        elem.insertAdjacentHTML('beforeend', '(<%= link_delete_file(file) %>)')
+        attached_files.insertAdjacentElement('beforeend', elem)
+      }
+    <% end %>
+  <% end %>
+}
+
+function process_file_elem(file) {
+  var elem = document.createElement('div')
+  elem.className += 'file'
+  att = document.createAttribute('file-id')
+  att.value = file
+  elem.setAttributeNode(att)
+
+  return elem
+}
