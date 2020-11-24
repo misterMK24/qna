@@ -92,6 +92,7 @@ GEM
       capybara (>= 2.0)
       launchy (>= 2.0)
     childprocess (3.0.0)
+    cocoon (1.2.15)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
     devise (4.7.3)
@@ -244,6 +245,9 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    validate_url (1.0.13)
+      activemodel (>= 3.0.0)
+      public_suffix
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.0.4)
@@ -275,6 +279,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   capybara-wsl
+  cocoon
   devise
   factory_bot_rails
   jbuilder (~> 2.7)
@@ -293,6 +298,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
   tzinfo-data
+  validate_url
   web-console (>= 3.3.0)
   webdrivers
   webpacker (~> 4.0)

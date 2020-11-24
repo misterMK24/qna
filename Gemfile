@@ -23,7 +23,10 @@ gem 'jbuilder', '~> 2.7'
 # gem 'bcrypt', '~> 3.1.7'
 gem "slim-rails"
 gem 'devise'
-
+# work with many nested forms
+gem 'cocoon'
+# validate url
+gem "validate_url"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 gem 'aws-sdk-s3', require: false
