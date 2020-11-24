@@ -5,4 +5,11 @@
   p= f.text_area :body
   = f.label :files
   p= f.file_field :files, multiple: true, direct_upload: true
+
+  p Links:
+  p
+    = f.fields_for :links do |link|
+      = render 'shared/link_fields', f: link
+    .question_links
+      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields' 
   = f.submit 'Save'

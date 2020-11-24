@@ -4,4 +4,13 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
   $('.answers').append('<%= j render @answer %>')
   $("textarea[id='answer_body']:visible").val('')
   $('.answers_count').text('<%= j pluralize(question.answers.count, 'Answer') %>')
+  
+  // TODO: refactor code below
+  <% if @answer.links.exists? %>
+    <% @answer.links.each do |link| %>
+      <% if link.is_gist? %>
+        window.GistEmbed.init("<%= link&.gist_id %>")
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

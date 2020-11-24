@@ -20,7 +20,7 @@
       = render 'shared/attachment', resource: question
       .row.question_links
         - if question.links.exists?
-          p Links:
+          | Links:
           - question.links.each do |link|
             = link_to link.name, link.url
       .row
@@ -30,7 +30,7 @@
     .answer-errors
     .best_answer
       = render @best_answer if @best_answer
-    .d-flex.answers      
+    .answers      
       = render @other_answers
     - if user_signed_in?  
       h3 Answer to a question
