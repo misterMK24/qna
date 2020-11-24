@@ -9,6 +9,7 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("cocoon-js")
+require("gist-embed/dist/gist-embed.min.js")
 // require("packs/answers.js")
 
 
