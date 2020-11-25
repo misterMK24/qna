@@ -31,7 +31,7 @@ FactoryBot.define do
 
     trait :with_link do
       after(:create) do |question|
-        question.links.create(nam: 'test link', url: 'https://gist.github.com/misterMK24/3268a773448539e557373109411f5f11')
+        question.links.create(name: 'test link', url: 'https://gist.github.com')
 
         question.reload
       end

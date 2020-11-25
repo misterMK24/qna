@@ -17,5 +17,13 @@ FactoryBot.define do
         answer.reload
       end
     end
+
+    trait :with_link do
+      after(:create) do |answer|
+        answer.links.create(name: 'test link', url: 'https://gist.github.com')
+
+        answer.reload
+      end
+    end
   end
 end

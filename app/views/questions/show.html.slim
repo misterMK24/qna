@@ -18,12 +18,8 @@ script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gist-embed@1.0.3
               = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
       .row.mb-4.question_body
         h4= question.body
+      = render 'shared/link', resource: question
       = render 'shared/attachment', resource: question
-      .row.question_links
-        - if question.links.exists?
-          | Links:
-          - question.links.each do |link|
-            = link_to link.name, link.url
       .row
         = render 'form'
     h2.answers_count.my-4

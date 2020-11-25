@@ -1,0 +1,14 @@
+.row.links
+  - if resource.links.exists?
+    h8.mr-2 Links:
+    .list_group
+      - resource.links.each do |link|
+        .link*{'link-id' => link.id}
+          - if link.is_gist?
+            code data-gist-id= link.gist_id data-gist-line='1-5' data-gist-hide-line-numbers='true'
+            - if current_user&.is_author?(resource)  
+              p= link_to 'delete', link_path(link), remote: true, method: :delete
+          - else
+            = link_to link.name, link.url, class: 'my-2'
+            - if current_user&.is_author?(resource)
+              | (#{link_to 'delete', link_path(link), remote: true, method: :delete})

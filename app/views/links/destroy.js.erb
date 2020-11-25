@@ -1,0 +1,10 @@
+<% if @link.destroyed? %>
+  var link = document.querySelector('.link[link-id="<%= @link.id %>"]')
+  var parent = link.parentElement
+  var links = parent.parentElement
+  parent.removeChild(link)
+  var header = links.querySelector('h8')
+  <% if @link.linkable.links.count.zero? %>
+    links.removeChild(header)
+  <% end %>
+<% end %>

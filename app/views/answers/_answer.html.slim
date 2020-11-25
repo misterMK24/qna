@@ -3,17 +3,7 @@
     .row
       h5.answer_value
         = answer.body
-    .row.answer_links
-      - if answer.links.exists?
-        h8.mr-2 Links:
-        .list_group
-          - answer.links.each do |link|
-            - if link.is_gist?
-              code data-gist-id= link.gist_id data-gist-line='1-5' data-gist-hide-line-numbers='true'
-            - else
-              p= link_to link.name, link.url, class: 'my-2'
-
-
+    = render 'shared/link', resource: answer
     = render 'shared/attachment', resource: answer
     p  
       - if current_user&.is_author?(answer.question) && question.best_answer != answer
