@@ -19,7 +19,8 @@ feature 'User can post an answer', %q{
 
     context 'with valid attributes' do
       given!(:answer) { create(:answer) }
-      given(:url) { 'https://gist.github.com' }
+      given(:url_1) { 'https://gist.github.com' }
+      given(:url_2) { 'https://google.com' }
 
       background { fill_in 'Body', with: answer.body }
       
@@ -40,13 +41,25 @@ feature 'User can post an answer', %q{
       end
 
       scenario 'answers to a question with added link' do
-        fill_in 'Link name', with: 'My gist'
-        fill_in 'Url', with: url
+        within all('.nested-fields')[0] do
+          fill_in 'Link name', with: 'gist link'
+          fill_in 'Url', with: url_1
+        end
+
+        within('.answer_links') do
+          click_on 'add link'
+        end
+
+        within all('.nested-fields')[1] do
+          fill_in 'Link name', with: 'google link'
+          fill_in 'Url', with: url_2
+        end
 
         click_on 'Post'
 
         within(:xpath, ".//div[@answer-id='#{answer.id + 1}']") do
-          expect(page).to have_link 'My gist', href: url  
+          expect(page).to have_link 'gist link', href: url_1
+          expect(page).to have_link 'google link', href: url_2
         end      
       end
     end

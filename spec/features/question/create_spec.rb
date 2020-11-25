@@ -17,7 +17,8 @@ feature 'User can create question', %q{
     end
 
     context 'with valid attributes' do
-      given(:url) { 'https://gist.github.com/' }
+      given(:url_1) { 'https://gist.github.com/' }
+      given(:url_2) { 'https://google.com/' }
 
       background do
         fill_in 'Title', with: 'Test question'
@@ -40,13 +41,25 @@ feature 'User can create question', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
 
-      scenario 'asks a question with added links' do
-        fill_in 'Link name', with: 'My gist'
-        fill_in 'Url', with: url
-  
+      scenario 'asks a question with added links', js: true do
+        within all('.nested-fields')[0] do
+          fill_in 'Link name', with: 'gist link'
+          fill_in 'Url', with: url_1    
+        end
+        
+        within('.question_links') do
+          click_on 'add link'
+        end
+
+        within all('.nested-fields')[1] do
+          fill_in 'Link name', with: 'google link'
+          fill_in 'Url', with: url_2
+        end
+
         click_on 'Ask'
   
-        expect(page).to have_link 'My gist', href: url 
+        expect(page).to have_link 'gist link', href: url_1
+        expect(page).to have_link 'google link', href: url_2
       end
     end
 
