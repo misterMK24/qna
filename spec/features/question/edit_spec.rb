@@ -10,6 +10,8 @@ feature 'User can edit question', %q{
   describe 'Authenticated user', js: true do
     given(:question) { create(:question) }
     given(:user_with_question) { question.user }
+    given(:url_1) { 'https://gist.github.com/' }
+    given(:url_2) { 'https://google.com/' }
 
     context 'auhtor' do
       background do
@@ -55,6 +57,32 @@ feature 'User can edit question', %q{
           expect(page).to have_content 'new question title'
           expect(page).to have_content 'text text text'
           expect(page).to have_link 'Edit'
+        end
+      end
+
+      scenario 'edits a question with a link' do
+        within('.questions') do
+          fill_in 'Title', with: 'new question title'
+          fill_in 'Body', with: 'text text text'
+
+          click_on 'add link'
+          
+          within all('.nested-fields')[0] do
+            fill_in 'Link name', with: 'gist link'
+            fill_in 'Url', with: url_1    
+          end
+
+          click_on 'add link'
+          
+          within all('.nested-fields')[1] do
+            fill_in 'Link name', with: 'google link'
+            fill_in 'Url', with: url_2
+          end
+
+          click_on 'Save'
+          
+          expect(page).to have_link 'gist link', href: url_1
+          expect(page).to have_link 'google link', href: url_2
         end
       end
     end

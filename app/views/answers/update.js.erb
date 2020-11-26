@@ -3,6 +3,7 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% unless @answer.errors.present? %>
   $('.answer[answer-id=<%= @answer.id %>]').find('.answer_value').text('<%= j @answer.body %>')
   updateAllFiles()
+  updateAllLinks()
   $('form#edit-answer-<%= answer.id %>').addClass('d-none')
   $('.edit_answer[data-answer-id=<%= answer.id %>]').removeClass('d-none')
 <% end %>
@@ -28,11 +29,55 @@ function updateAllFiles() {
   <% end %>
 }
 
+function updateAllLinks() {
+  <% if answer.links.present? %>
+    let current_answer = document.querySelector('.answer[answer-id="<%= @answer.id %>"]')
+    let links_list = current_answer.querySelector('.links')
+
+    if (!links_list.querySelector('h8')) {
+      links_list.insertAdjacentHTML('beforeend', "<h8 class='mr-2'>Links: <h8>")
+    }
+
+    if (!links_list.querySelector('.list_group')) {
+      links_list.insertAdjacentHTML('beforeend', "<div class='list_group'></div>")
+    }
+    let links_group = links_list.querySelector('.list_group')
+    let links = links_group.querySelectorAll('.link')
+
+    <% answer.links.each do |link| %>
+      if (!links_group.querySelector('.link[link-id="<%= link.id %>"]')) {
+        var elem = process_link_elem("<%= link.id %>")
+        <% if link.is_gist? %>
+          elem.insertAdjacentHTML('beforeend', "<%= to_gist_link(link) %>")
+          elem.insertAdjacentHTML('beforeend', '<%= to_delete_gist_link(link) %>')
+          links_group.insertAdjacentElement('beforeend', elem)
+          window.GistEmbed.init("<%= link&.gist_id %>")
+        <% else %>
+          elem.insertAdjacentHTML('beforeend', '<%= to_link(link) %>')
+          elem.insertAdjacentHTML('beforeend', '(<%= to_delete_link(link) %>)')
+          links_group.insertAdjacentElement('beforeend', elem)
+        <% end %>
+      }
+    <% end %>
+  <% end %>
+}
+
+
 function process_file_elem(file) {
   var elem = document.createElement('div')
   elem.className += 'file'
   att = document.createAttribute('file-id')
   att.value = file
+  elem.setAttributeNode(att)
+
+  return elem
+}
+
+function process_link_elem(link) {
+  var elem = document.createElement('div')
+  elem.className += 'link'
+  att = document.createAttribute('link-id')
+  att.value = link
   elem.setAttributeNode(att)
 
   return elem

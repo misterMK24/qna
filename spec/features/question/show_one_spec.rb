@@ -14,7 +14,7 @@ feature 'User can see a particular question', %q{
     scenario 'user gets a question page with answers' do
       expect(page).to have_content(question.title)
       expect(page).to have_content(question.body)  
-      expect(page).to have_xpath(".//div[@class='d-flex answers']/*", count: question.answers.length)
+      expect(page).to have_css('.answers .answer', count: question.answers.length)
     end
   end
 
@@ -24,7 +24,7 @@ feature 'User can see a particular question', %q{
     scenario 'user gets a question page without answers' do
       expect(page).to have_content(question.title)
       expect(page).to have_content(question.body)  
-      expect(page).to have_xpath(".//div[@id='answers']/*", count: 0)
+      expect(page).to have_css('.answers .answer', count: 0)
     end
   end
 end

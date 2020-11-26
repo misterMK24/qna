@@ -11,6 +11,8 @@ feature 'User can edit an answer', %q{
     given(:answer) { create(:answer) }
     given(:user_with_answer) { answer.user }
     given(:question) { answer.question }
+    given(:url_1) { 'https://gist.github.com/' }
+    given(:url_2) { 'https://google.com/' }
 
     context 'auhtor' do
       background do
@@ -56,7 +58,31 @@ feature 'User can edit an answer', %q{
           expect(page).to have_link 'rails_helper.rb'
           expect(page).to have_link 'spec_helper.rb'
         end
+      end
 
+      scenario 'edits an answer with a link' do
+        within(:xpath, ".//div[@answer-id='#{answer.id}']") do
+          fill_in 'Body', with: 'text text text'
+
+          click_on 'add link'
+          
+          within all('.nested-fields')[0] do
+            fill_in 'Link name', with: 'gist link'
+            fill_in 'Url', with: url_1    
+          end
+
+          click_on 'add link'
+          
+          within all('.nested-fields')[1] do
+            fill_in 'Link name', with: 'google link'
+            fill_in 'Url', with: url_2
+          end
+
+          click_on 'Save'
+          
+          expect(page).to have_link 'gist link', href: url_1
+          expect(page).to have_link 'google link', href: url_2
+        end
       end
     end
   
