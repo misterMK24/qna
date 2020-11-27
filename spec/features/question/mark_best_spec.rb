@@ -12,6 +12,7 @@ feature 'Question author can mark bset answer', %q{
   describe 'Authenticated user', js: true do
     context 'auhtor' do
       given!(:user_with_question) { question.user }
+      given!(:reward) { create(:reward, question: question) }
 
       scenario 'user marks answer as the best' do
         sign_in(user_with_question)

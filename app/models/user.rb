@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :questions, foreign_key: 'user_id', dependent: :destroy
   has_many :answers, foreign_key: 'user_id', dependent: :destroy
+  has_many :rewards, dependent: :destroy
 
   def is_author?(resource)
     self.id == resource.user_id

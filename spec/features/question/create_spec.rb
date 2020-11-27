@@ -21,8 +21,8 @@ feature 'User can create question', %q{
       given(:url_2) { 'https://google.com/' }
 
       background do
-        fill_in 'Title', with: 'Test question'
-        fill_in 'Body', with: 'text text text'
+        fill_in 'question_title', with: 'Test question'
+        fill_in 'question_body', with: 'text text text'
       end
 
       scenario 'asks a questions' do
@@ -60,6 +60,17 @@ feature 'User can create question', %q{
   
         expect(page).to have_link 'gist link', href: url_1
         expect(page).to have_link 'google link', href: url_2
+      end
+
+      scenario 'asks a question with added reward', js: true do
+        within('.reward_form') do
+          fill_in 'Title', with: 'reward'
+          attach_file 'Image', "#{Rails.root}/spec/fixtures/file/racecar.jpg"
+        end
+
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your quesion successfully created.'  
       end
     end
 

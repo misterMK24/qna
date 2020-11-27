@@ -46,6 +46,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question).links.first).to be_a_new(Link)
     end
 
+    it 'assigns a new Reward to @question' do
+      expect(assigns(:question).reward).to be_a_new(Reward)
+    end
+
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -138,8 +142,9 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #mark_best', js: true do
-    let(:question) { create(:question, :with_answer) }
+    let!(:question) { create(:question, :with_answer) }
     let(:answer) { question.answers.first }
+    let!(:reward) { create(:reward, question: question) }
     
     context 'author' do
       let(:user_with_question) { question.user }
@@ -153,6 +158,10 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
 
         expect(question.best_answer).to eq answer
+      end
+
+      it 'rewards an author of the answer' do
+        expect(answer.user.rewards.first).to eq reward
       end
 
       it 'renders mark_best.js' do

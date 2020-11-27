@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.links.new
+    @question.build_reward
   end
 
   def create
@@ -44,8 +45,9 @@ class QuestionsController < ApplicationController
   
   def mark_best
     if current_user.is_author?(question)
+      answer = Answer.with_attached_files.find(params[:answer])
       @old_best_answer = question.best_answer
-      question.mark_as_best(params[:answer])
+      question.mark_as_best(answer)
     else
       redirect_to root_path, notice: 'You are not author of this question'
     end
@@ -70,6 +72,7 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, :best_answer_id, 
-                                      files: [], links_attributes: [:name, :url, :id, :_destroy])
+                                      files: [], links_attributes: [:name, :url, :id, :_destroy], 
+                                      reward_attributes: [:title, :image, :id, :_destroy])
   end
 end
