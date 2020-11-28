@@ -7,7 +7,7 @@ feature 'User can post an answer', %q{
   I'd like to be able to post an answer
 } do
 
-  given!(:question) { create(:question, :with_answer, amount: 1) }
+  given!(:question) { create(:question) }
 
   describe 'Authenticated user', js: true do
     given(:user) { create(:user) }
@@ -18,7 +18,7 @@ feature 'User can post an answer', %q{
     end
 
     context 'with valid attributes' do
-      given!(:answer) { create(:answer) }
+      given!(:answer) { create(:answer, question: question) }
       given(:url_1) { 'https://gist.github.com' }
       given(:url_2) { 'https://google.com' }
 

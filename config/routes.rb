@@ -9,4 +9,5 @@ Rails.application.routes.draw do
 
   resources :attachments, only: %i[destroy]
   resources :links, only: %i[destroy]
+  get 'rewards/index'
 end
