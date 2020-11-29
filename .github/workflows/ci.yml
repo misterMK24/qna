@@ -1,6 +1,5 @@
 env:
   RUBY_VERSION: 2.6.6
-  USER: postgres
   POSTGRES_DB: qna_test
 
 name: CI
@@ -16,8 +15,6 @@ jobs:
         image: postgres:latest
         ports:
           - 5432:5432
-        env:
-          POSTGRES_USER: ${{ env.USER }}
 
     steps:
       - uses: actions/checkout@v2
