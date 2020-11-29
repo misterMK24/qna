@@ -3,10 +3,12 @@ class LinksController < ApplicationController
   
   def destroy
     @link = Link.find(params[:id])
-    if current_user.is_author?(@link.linkable)
+    @resource = @link.linkable
+    @position = @resource.links.index(@link)
+    if current_user.is_author?(@resource)
       @link.destroy
     else
-      redirect_to root_path, notice: "You are not author of this #{@link.linkable.class.to_s}"
+      redirect_to root_path, notice: "You are not author of this #{@resource.class.name}"
     end
   end
 end

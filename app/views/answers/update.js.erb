@@ -35,7 +35,7 @@ function updateAllLinks() {
     let links_list = current_answer.querySelector('.links')
 
     if (!links_list.querySelector('h8')) {
-      links_list.insertAdjacentHTML('beforeend', "<h8 class='mr-2'>Links: <h8>")
+      links_list.insertAdjacentHTML('afterbegin', "<h8 class='mr-2'>Links: <h8>")
     }
 
     if (!links_list.querySelector('.list_group')) {

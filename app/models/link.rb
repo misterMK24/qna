@@ -12,6 +12,8 @@ class Link < ApplicationRecord
     GIST_TEMPLATE.match(self.url)[2]
   end
 
+  default_scope { order(:created_at) }
+
   private
 
   GIST_TEMPLATE = /gist\.github\.com\/(\w*)\/(\w*)/
