@@ -4,12 +4,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  EnabledByDefault: true
-  Exclude:
-    - 'db/**/*'
-    - 'script/**/*'
-    - 'bin/**/*'
-    - 'node_modules/**/*'
+  NewCops: enable
 
 Layout/LineLength:
   Max: 180
