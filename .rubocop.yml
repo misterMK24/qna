@@ -4,7 +4,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  NewCops: enable
+  EnabledByDefault: true
   Exclude:
     - 'db/**/*'
     - 'script/**/*'
