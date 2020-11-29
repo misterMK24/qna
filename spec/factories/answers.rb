@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :answer do
-    body { "Body" }
+    body { 'Body' }
     question
     user
 
@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :with_attachment do
       after(:create) do |answer|
-        file = Rails.root.join('spec', 'fixtures', 'file', 'racecar.jpg')
+        file = Rails.root.join('spec/fixtures/file/racecar.jpg')
         image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'), filename: 'racecar.jpg', content_type: 'image/jpg')
         answer.files.attach(image)
 

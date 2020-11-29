@@ -1,12 +1,11 @@
 require 'rails_helper'
 
-feature 'User can post an answer', %q{
-  In order to give an answer 
+feature 'User can post an answer', "
+  In order to give an answer
   for particular question
   As an authenticated user
   I'd like to be able to post an answer
-} do
-
+" do
   given!(:question) { create(:question) }
 
   describe 'Authenticated user', js: true do
@@ -19,11 +18,11 @@ feature 'User can post an answer', %q{
 
     context 'with valid attributes' do
       given!(:answer) { create(:answer, question: question) }
-      given(:url_1) { 'https://gist.github.com' }
-      given(:url_2) { 'https://google.com' }
+      given(:url1) { 'https://gist.github.com' }
+      given(:url2) { 'https://google.com' }
 
       background { fill_in 'Body', with: answer.body }
-      
+
       scenario 'answers to a question with valid attribute' do
         click_on 'Post'
 
@@ -43,30 +42,20 @@ feature 'User can post an answer', %q{
       scenario 'answers to a question with added link' do
         within all('.nested-fields')[0] do
           fill_in 'Link name', with: 'gist link'
-          fill_in 'Url', with: url_1
-        end
-
-        within('.answer_links') do
-          click_on 'add link'
-        end
-
-        within all('.nested-fields')[1] do
-          fill_in 'Link name', with: 'google link'
-          fill_in 'Url', with: url_2
+          fill_in 'Url', with: url1
         end
 
         click_on 'Post'
 
         within(:xpath, ".//div[@answer-id='#{answer.id + 1}']") do
-          expect(page).to have_link 'gist link', href: url_1
-          expect(page).to have_link 'google link', href: url_2
-        end      
+          expect(page).to have_link 'gist link', href: url1
+        end
       end
     end
 
     scenario 'answers to a question with errors' do
       click_on 'Post'
-    
+
       expect(page).to have_content "Body can't be blank"
     end
   end

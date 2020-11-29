@@ -47,7 +47,7 @@ function updateAllLinks() {
     <% answer.links.each do |link| %>
       if (!links_group.querySelector('.link[link-id="<%= link.id %>"]')) {
         var elem = process_link_elem("<%= link.id %>")
-        <% if link.is_gist? %>
+        <% if link.gist? %>
           elem.insertAdjacentHTML('beforeend', "<%= to_gist_link(link) %>")
           elem.insertAdjacentHTML('beforeend', '<%= to_delete_gist_link(link) %>')
           links_group.insertAdjacentElement('beforeend', elem)

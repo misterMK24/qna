@@ -1,18 +1,17 @@
 require 'rails_helper'
 
-feature 'User can see a list of questions', %q{
+feature 'User can see a list of questions', '
   In order to get a list of questions,
-  user (no matter - is he registered or not) 
+  user (no matter - is he registered or not)
   should be able to see a list of all questions
-} do
-
+' do
   describe 'wuth questions' do
     given!(:questions) { create_list(:question, 2) }
-    
+
     scenario 'user gets a list of questions' do
       visit questions_path
-      
-      expect(page).to have_xpath(".//div[@id='questions']/*", count: questions.length) 
+
+      expect(page).to have_xpath(".//div[@id='questions']/*", count: questions.length)
     end
   end
 
