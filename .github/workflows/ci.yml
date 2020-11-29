@@ -1,5 +1,7 @@
 env:
   RUBY_VERSION: 2.6.6
+  USER: postgres
+  PASSWORD: postgres
   POSTGRES_DB: qna_test
 
 name: CI
@@ -48,6 +50,7 @@ jobs:
       - name: Create database
         env:
           RAILS_ENV: test
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: bundler exec rails db:create db:migrate
 
       - name: Rubocop
