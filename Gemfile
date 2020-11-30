@@ -40,10 +40,10 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails', '~> 4.0.1'
   # rubocop
-  gem 'rubocop'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec'
+  gem 'rubocop', '~> 1.3'
+  gem 'rubocop-performance', '~> 1.9'
+  gem 'rubocop-rails', '~> 2.8'
+  gem 'rubocop-rspec', '~> 2.0'
 end
 
 group :development do
