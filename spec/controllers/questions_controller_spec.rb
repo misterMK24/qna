@@ -5,9 +5,10 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
+
     before { get :index }
 
-    it 'should return an array of existed questions' do
+    it 'return an array of existed questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
 
@@ -25,18 +26,20 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template :show
     end
 
-    it "assigns new answer for question" do
+    it 'assigns new answer for question' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it "assigns new link for answer" do
+    it 'assigns new link for answer' do
       expect(assigns(:answer).links.first).to be_a_new(Link)
     end
   end
 
   describe 'GET #new' do
-    before { login(user) }
-    before { get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -58,7 +61,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     before { login(user) }
 
-    context "with valid attributes" do
+    context 'with valid attributes' do
       it 'saves a new question into the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
@@ -67,31 +70,30 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to assigns(:question)
       end
-
     end
-    
-    context "with invalid attributes" do
+
+    context 'with invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.not_to change(Question, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { question: attributes_for(:question, :invalid ) }
+        post :create, params: { question: attributes_for(:question, :invalid) }
         expect(response).to render_template :new
       end
-    end    
+    end
   end
 
   describe 'PATCH #update', js: true do
     let(:user_with_questions) { create(:user, :with_question, amount: 1) }
     let(:question) { user_with_questions.questions.first }
 
-    context 'author' do
+    context 'when author' do
       before { login(user_with_questions) }
 
-      context "with valid attributes" do
+      context 'with valid attributes' do
         it 'update question attributes' do
-          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: 'js'  
+          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: 'js'
           question.reload
 
           expect(question.title).to eq 'new title'
@@ -103,10 +105,9 @@ RSpec.describe QuestionsController, type: :controller do
 
           expect(response).to render_template :update
         end
-
       end
 
-      context "with invalid attributes" do
+      context 'with invalid attributes' do
         before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: 'js' }
 
         it 'does not change the question' do
@@ -122,12 +123,12 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'third person' do
+    context 'when third person' do
       before do
         login(user)
         patch :update, params: { id: question, question: attributes_for(:question) }, format: 'js'
       end
-      
+
       it 'does not change the question' do
         question.reload
 
@@ -145,10 +146,10 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question) { create(:question, :with_answer) }
     let(:answer) { question.answers.first }
     let!(:reward) { create(:reward, question: question) }
-    
-    context 'author' do
+
+    context 'when author' do
       let(:user_with_question) { question.user }
-  
+
       before do
         login(user_with_question)
         patch :mark_best, params: { id: question, answer: answer.id }, format: 'js'
@@ -168,8 +169,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :mark_best
       end
     end
-  
-    context 'third person' do
+
+    context 'when third person' do
       before do
         login(user)
         patch :mark_best, params: { id: question, question: { best_answer_id: answer.id } }, format: 'js'
@@ -191,7 +192,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:user_with_questions) { create(:user, :with_question, amount: 1) }
     let(:question) { user_with_questions.questions.first }
 
-    context 'author' do
+    context 'when author' do
       before { login(user_with_questions) }
 
       it 'deletes the question' do
@@ -205,11 +206,11 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'third person' do
+    context 'when third person' do
       before { login(user) }
 
       it 'does not delete the question' do
-        expect { delete :destroy, params: { id: question } }.to_not change(user_with_questions.questions, :count)
+        expect { delete :destroy, params: { id: question } }.not_to change(user_with_questions.questions, :count)
       end
 
       it 'redirects to index page' do

@@ -1,26 +1,25 @@
 require 'rails_helper'
 
-feature 'User can delete a link', %q{
-  In order to delete a link 
+feature 'User can delete a link', "
+  In order to delete a link
   for particular resource
   As an authenticated user
   and author of this resource
   I'd like to be able to delete a link
-} do
-
+" do
   given!(:user) { create(:user) }
   given!(:question) { create(:question, :with_answer, :with_link, user: user) }
   given!(:answer) { create(:answer, :with_link, user: user, question: question) }
   given!(:link) { question.links.first }
 
-  describe "Authenticated user", js: true do
-    context "author" do
+  describe 'Authenticated user', js: true do
+    context 'when author' do
       background do
         sign_in(user)
-  
+
         visit question_path(question)
       end
-      
+
       scenario 'deletes a link from question' do
         within('.questions .links') do
           click_link 'delete'
@@ -38,12 +37,12 @@ feature 'User can delete a link', %q{
       end
     end
 
-    context "third person" do
+    context 'when third person' do
       given(:third_person) { create(:user) }
 
       background do
         sign_in(third_person)
-  
+
         visit question_path(question)
       end
 
@@ -61,12 +60,12 @@ feature 'User can delete a link', %q{
     end
   end
 
-  describe "Unauthenticated user" do
+  describe 'Unauthenticated user' do
     background { visit question_path(question) }
 
     scenario 'deletes a link from question' do
       within('.questions .links') do
-        expect(page).to have_no_link('delete')  
+        expect(page).to have_no_link('delete')
       end
     end
 
@@ -77,4 +76,3 @@ feature 'User can delete a link', %q{
     end
   end
 end
-

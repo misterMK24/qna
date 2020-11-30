@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :reward do
-    title { "reward" }
+    title { 'reward' }
     question
-    image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'file', 'racecar.jpg'), 'image/jpg') }
+    image { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/file/racecar.jpg'), 'image/jpg') }
 
     trait :with_user do
       after(:create) do |reward|

@@ -7,7 +7,7 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
   
   <% if @answer.links.exists? %>
     <% @answer.links.each do |link| %>
-      <% if link.is_gist? %>
+      <% if link.gist? %>
         window.GistEmbed.init("<%= link&.gist_id %>")
       <% end %>
     <% end %>

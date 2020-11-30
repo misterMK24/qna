@@ -5,12 +5,12 @@ RSpec.describe Question, type: :model do
   it { should have_many(:links).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).class_name('Answer').optional }
-  it { should belong_to(:user).with_foreign_key('user_id') }
+  it { should belong_to(:user) }
 
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
 
-  it {should have_many_attached :files }
+  it { should have_many_attached :files }
 
   it { should accept_nested_attributes_for :links }
 end

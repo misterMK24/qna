@@ -1,32 +1,31 @@
 require 'rails_helper'
 
-feature 'User can delete an answer', %q{
-  In order to delete an answer 
+feature 'User can delete an answer', "
+  In order to delete an answer
   for particular question
   As an authenticated user
   and author of this answer
   I'd like to be able to delete an answer
-} do
-
+" do
   given(:answer) { create(:answer) }
   given(:user) { answer.user }
   given(:question) { answer.question }
 
   describe 'Authenticated user', js: true do
-    context 'author' do
+    context 'when author' do
       scenario 'tries to delete an answer' do
         sign_in(user)
         visit question_path(question)
 
         within('.answers') do
           click_on 'Delete'
-        
-          expect(page).to_not have_content answer.body
+
+          expect(page).not_to have_content answer.body
         end
       end
     end
 
-    context 'third person' do
+    context 'when third person' do
       given(:user) { create(:user) }
 
       scenario 'third person tries to delete an answer' do
