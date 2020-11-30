@@ -1,10 +1,5 @@
 env:
   RUBY_VERSION: 2.6.6
-  RAILS_ENV: test
-  POSTGRES_HOST: localhost
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: ci_db_test
 
 name: CI
 on: [push, pull_request]
@@ -55,6 +50,11 @@ jobs:
 
       - name: Create database
         env:
+          RAILS_ENV: test
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: |
           cp config/database.yml.ci config/database.yml
@@ -66,5 +66,10 @@ jobs:
 
       - name: RSpec
         env:
+          RAILS_ENV: test
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: bundle exec rspec
