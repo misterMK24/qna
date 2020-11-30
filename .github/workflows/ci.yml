@@ -64,7 +64,7 @@ jobs:
           bundler exec rails db:create db:migrate
 
       - name: Rubocop
-        run: bundle exec rubocop --force-exclusion
+        run: bundle exec rubocop --enable-pending-cops
 
       - name: RSpec
         run: bundle exec rspec
