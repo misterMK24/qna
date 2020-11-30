@@ -9,6 +9,7 @@ AllCops:
     - 'script/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+    - vendor/**/*
   TargetRubyVersion: 2.6.6
 
 Layout/LineLength:
