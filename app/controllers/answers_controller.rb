@@ -2,22 +2,22 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = current_user.answers.new(answer_params) 
+    @answer = current_user.answers.new(answer_params)
     @answer.question = question
     @answer.save
   end
 
   def update
     @question = answer.question
-    if current_user.is_author?(answer)
+    if current_user.author?(answer)
       answer.update(answer_params)
     else
       redirect_to root_path, notice: 'You are not author of this answer'
     end
   end
-  
+
   def destroy
-    if current_user.is_author?(answer)
+    if current_user.author?(answer)
       answer.destroy
     else
       redirect_to question, notice: 'You are not author of this answer'
@@ -27,7 +27,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body, files: [], links_attributes: [:name, :url, :id, :_destroy])
+    params.require(:answer).permit(:body, files: [], links_attributes: %i[name url id _destroy])
   end
 
   def answer

@@ -10,7 +10,7 @@ RSpec.describe RewardsController, type: :controller do
       get :index
     end
 
-    it 'should return an array of existed rewards for current user' do
+    it 'return an array of existed rewards for current user' do
       expect(assigns(:rewards)).to match_array(rewards)
     end
 

@@ -1,6 +1,6 @@
 module ApplicationHelper
   def link_to_file(file)
-    link_to file.filename.to_s, url_for(file), class: "ml-2"
+    link_to file.filename.to_s, url_for(file), class: 'ml-2'
   end
 
   def link_delete_file(file)
@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def to_link(link)
-    link_to link.name, link.url, class: "my-2"
+    link_to link.name, link.url, class: 'my-2'
   end
 
   def to_gist_link(link)
@@ -16,7 +16,7 @@ module ApplicationHelper
   end
 
   def to_delete_gist_link(link)
-    "<p>#{link_to 'delete', link_path(link), remote: true, method: :delete}</p>".html_safe
+    content_tag(:p, (link_to 'delete', link_path(link), remote: true, method: :delete))
   end
 
   def to_delete_link(link)

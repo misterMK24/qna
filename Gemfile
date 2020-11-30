@@ -21,12 +21,12 @@ gem 'jbuilder', '~> 2.7'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-gem "slim-rails"
 gem 'devise'
+gem 'slim-rails'
 # work with many nested forms
 gem 'cocoon'
 # validate url
-gem "validate_url"
+gem 'validate_url'
 # simple validation for active storage
 gem 'active_storage_validations'
 # Use Active Storage variant
@@ -36,15 +36,20 @@ gem 'aws-sdk-s3', require: false
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails', '~> 4.0.1'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 4.0.1'
+  # rubocop
+  gem 'rubocop', '~> 1.3'
+  gem 'rubocop-performance', '~> 1.9'
+  gem 'rubocop-rails', '~> 2.8'
+  gem 'rubocop-rspec', '~> 2.0'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.2'
+  gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -52,13 +57,13 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
-  gem 'shoulda-matchers', '~> 4.0'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
-  gem 'rails-controller-testing'
+  gem 'capybara-wsl'
   gem 'launchy'
-  gem "capybara-wsl"
+  gem 'rails-controller-testing'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 4.0'
+  gem 'webdrivers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

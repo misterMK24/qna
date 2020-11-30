@@ -1,10 +1,9 @@
 require 'rails_helper'
 
-feature 'User can see a list of his rewards', %q{
+feature 'User can see a list of his rewards', '
   In order to get a list of rewards,
   user should be able to see a list of his rewards
-} do
-
+' do
   describe 'wuth rewards' do
     given!(:user) { create(:user) }
     given!(:rewards) { create_list(:reward, 2, user: user) }
@@ -13,7 +12,7 @@ feature 'User can see a list of his rewards', %q{
       sign_in(user)
       visit rewards_index_path
 
-      expect(page).to have_xpath(".//div[@class='card']", count: rewards.length) 
+      expect(page).to have_xpath(".//div[@class='card']", count: rewards.length)
     end
   end
 

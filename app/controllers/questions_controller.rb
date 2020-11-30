@@ -28,7 +28,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    if current_user.is_author?(question)
+    if current_user.author?(question)
       render :edit
     else
       redirect_to root_path, notice: 'You are not author of this question'
@@ -36,15 +36,15 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.is_author?(question)
+    if current_user.author?(question)
       question.update(question_params)
     else
       redirect_to root_path, notice: 'You are not author of this question'
     end
   end
-  
+
   def mark_best
-    if current_user.is_author?(question)
+    if current_user.author?(question)
       answer = Answer.with_attached_files.find(params[:answer])
       @old_best_answer = question.best_answer
       question.mark_as_best(answer)
@@ -54,7 +54,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.is_author?(question)
+    if current_user.author?(question)
       question.destroy
       redirect_to questions_path, notice: 'Question has been successfully deleted'
     else
@@ -71,8 +71,8 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id, 
-                                      files: [], links_attributes: [:name, :url, :id, :_destroy], 
-                                      reward_attributes: [:title, :image, :id, :_destroy])
+    params.require(:question).permit(:title, :body, :best_answer_id,
+                                     files: [], links_attributes: %i[name url id _destroy],
+                                     reward_attributes: %i[title image id _destroy])
   end
 end
