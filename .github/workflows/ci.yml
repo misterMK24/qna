@@ -1,8 +1,11 @@
 env:
   RUBY_VERSION: 2.6.6
-  USER: postgres
-  PASSWORD: postgres
-  POSTGRES_DB: qna_test
+  RAILS_ENV: test
+  POSTGRES_HOST: localhost
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: ci_db_test
+  POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
 
 name: CI
 on: [push, pull_request]
@@ -52,13 +55,6 @@ jobs:
         run: sudo apt-get install libpq-dev
 
       - name: Create database
-        env:
-          RAILS_ENV: test
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: ci_db_test
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: |
           cp config/database.yml.ci config/database.yml
           bundle exec rails db:create
@@ -68,11 +64,4 @@ jobs:
         run: bundle exec rubocop --enable-pending-cops
 
       - name: RSpec
-        env:
-          RAILS_ENV: test
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: ci_db_test
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: bundle exec rspec
