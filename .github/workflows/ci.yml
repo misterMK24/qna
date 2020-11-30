@@ -61,7 +61,8 @@ jobs:
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: |
           cp config/database.yml.ci config/database.yml
-          bundler exec rails db:create db:migrate
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
 
       - name: Rubocop
         run: bundle exec rubocop --enable-pending-cops
