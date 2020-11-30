@@ -23,10 +23,10 @@ feature 'User can post an answer', "
 
       background { fill_in 'Body', with: answer.body }
 
-      scenario 'answers to a question with valid attribute' do
+      scenario 'answers to a question' do
         click_on 'Post'
 
-        expect(page).to have_css('.answers', count: question.answers.length)
+        expect(page).to have_xpath('.//div[@class="answers"]/*', minimum: question.answers.length)
       end
 
       scenario 'answers to a question with attached files' do
