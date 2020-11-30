@@ -5,6 +5,11 @@ require:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
 
 Layout/LineLength:
   Max: 180
