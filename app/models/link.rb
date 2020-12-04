@@ -13,6 +13,4 @@ class Link < ApplicationRecord
   def gist_id
     GIST_TEMPLATE.match(url)[2]
   end
-
-  default_scope { order(:created_at) }
 end

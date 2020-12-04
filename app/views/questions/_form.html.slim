@@ -7,7 +7,7 @@
   p= f.file_field :files, multiple: true, direct_upload: true
 
   p Links:
-  p
+  #links
     = f.fields_for :links do |link|
       = render 'shared/link_fields', f: link
     .question_links

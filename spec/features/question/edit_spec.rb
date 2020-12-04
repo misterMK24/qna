@@ -7,14 +7,14 @@ feature 'User can edit question', "
   I'd like to be able to edit the question
 " do
   describe 'Authenticated user', js: true do
-    given(:question) { create(:question) }
-    given(:user_with_question) { question.user }
+    given(:user) { create(:user) }
+    given!(:question) { create(:question, :with_link, user: user) }
+    given!(:link) { question.links.first }
     given(:url1) { 'https://gist.github.com/' }
-    # given(:url_2) { 'https://google.com/' }
 
     context 'when auhtor' do
       background do
-        sign_in(user_with_question)
+        sign_in(user)
 
         visit question_path(question)
         within('.questions') do
@@ -74,11 +74,20 @@ feature 'User can edit question', "
           expect(page).to have_link 'gist link', href: url1
         end
       end
+
+      scenario 'deletes a link from question' do
+        within('.questions') do
+          click_on 'remove link'
+          click_on 'Save'
+
+          expect(page).to have_no_link link.name, href: link.url
+        end
+      end
     end
 
     context 'when third person' do
-      given(:user) { create(:user) }
-      background { sign_in(user) }
+      given(:third_person) { create(:user) }
+      background { sign_in(third_person) }
 
       scenario 'third person edits a question through show page' do
         visit question_path(question)

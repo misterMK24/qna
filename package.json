@@ -2,11 +2,13 @@
   "name": "qna",
   "private": true,
   "dependencies": {
+    "@kollegorna/cocoon-vanilla-js": "^1.0.7",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
     "bootstrap": "4.3.1",
+    "cocoon": "github:nathanvda/cocoon",
     "cocoon-js": "^0.0.5",
     "gist-embed": "^1.0.4",
     "jquery": "^3.5.1",

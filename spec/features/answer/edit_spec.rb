@@ -7,24 +7,25 @@ feature 'User can edit an answer', "
   I'd like to be able to edit the answer
 " do
   describe 'Authenticated user', js: true do
-    given(:answer) { create(:answer) }
-    given(:user_with_answer) { answer.user }
-    given(:question) { answer.question }
+    given!(:user) { create(:user, :with_answer, amount: 1) }
+    given!(:question) { create(:question, :with_answer, :with_link, user: user) }
+    given!(:answer) { create(:answer, :with_link, user: user, question: question) }
+    given!(:link) { answer.links.first }
     given(:url1) { 'https://gist.github.com/' }
 
     context 'when auhtor' do
       background do
-        sign_in(user_with_answer)
+        sign_in(user)
 
         visit question_path(question)
-        within('.answers') do
-          click_link('Edit')
+        within(".answer[answer-id='#{answer.id}']") do
+          click_on 'Edit'
         end
       end
 
-      scenario 'edits an answer' do
-        within('.answers') do
-          fill_in 'Body', with: 'text text text'
+      scenario 'edits an answer', js: true do
+        within(".answer[answer-id='#{answer.id}']") do
+          fill_in 'answer_body', with: 'text text text'
           click_on 'Save'
 
           expect(page).not_to have_content answer.body
@@ -74,11 +75,20 @@ feature 'User can edit an answer', "
           expect(page).to have_link 'gist link', href: url1
         end
       end
+
+      scenario 'deletes a link from answer' do
+        within(".answer[answer-id='#{answer.id}']") do
+          click_on 'remove link'
+          click_on 'Save'
+
+          expect(page).to have_no_link link.name, href: link.url
+        end
+      end
     end
 
     context 'when third person' do
-      given(:user) { create(:user) }
-      background { sign_in(user) }
+      given(:third_person) { create(:user) }
+      background { sign_in(third_person) }
 
       scenario 'edits an answer' do
         visit question_path(question)
