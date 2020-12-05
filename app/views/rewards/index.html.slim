@@ -1,0 +1,11 @@
+h1 My Rewards
+- @rewards.each do |reward|
+  div.card style="width: 25rem"
+    = image_tag reward.image, size: "320x200", class: 'card-img-top'
+    h5.card-title
+      = reward.title
+    p.card-text
+      | Question: 
+      = reward.question.title
+p
+= link_to 'Back', root_path, class: 'btn btn-primary'

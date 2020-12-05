@@ -4,5 +4,5 @@
     - resource.files.each do |file| 
       .file*{'file-id' => file.id}
         = link_to file.filename.to_s, url_for(file), class: 'ml-2'
-        - if current_user&.is_author?(resource)
+        - if current_user&.author?(resource)
           | (#{link_to 'delete', attachment_path(file), remote: true, method: :delete})

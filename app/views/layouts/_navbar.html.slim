@@ -1,6 +1,7 @@
 nav.navbar.navbar-expand-lg
   - if user_signed_in?
     ul.d-flex.navbar-nav.ml-auto
+      p= link_to 'My Rewards', rewards_index_path, class: 'btn btn-outline-primary mr-4 my-sm-0'
       p= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-danger my-2 my-sm-0'
   - else
     ul.d-flex.navbar-nav

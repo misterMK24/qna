@@ -4,6 +4,8 @@ $('.question-errors').html('<%= render 'shared/errors', resource: question %>');
   $('.question_title').html('<h3><%= question.title %></h3>')
   $('.question_body').html('<h4><%= question.body %></h4>')
   updateAllFiles()
+  updateAllLinks()
+  updateAllLinkForms()
   $('form#question_edit').addClass('d-none')
   $('.edit_question').removeClass('d-none')
 <% end %>
@@ -21,12 +23,62 @@ function updateAllFiles() {
     <% question.files.each do |file| %>
       if (!attached_files.querySelector('.file[file-id="<%= file.id %>"]')) {
         var elem = process_file_elem("<%= file.id %>")
-        elem.insertAdjacentHTML('beforeend', '<%= link_to_file(file) %>')
-        elem.insertAdjacentHTML('beforeend', '(<%= link_delete_file(file) %>)')
+        elem.insertAdjacentHTML('beforeend', '<%= link_to file.filename.to_s, url_for(file), class: "ml-2" %>')
+        elem.insertAdjacentHTML('beforeend', '(<%= link_to "delete", attachment_path(file), remote: true, method: :delete %>)')
         attached_files.insertAdjacentElement('beforeend', elem)
       }
     <% end %>
   <% end %>
+}
+
+function updateAllLinks() {
+  let current_question = document.querySelector('.questions')
+  let links_list = current_question.querySelector('.links')
+  <% if question.links.present? %>
+    if (!links_list.querySelector('h8')) {
+      links_list.insertAdjacentHTML('afterbegin', "<h8 class='mr-2'>Links: <h8>")
+    }
+
+    if (!links_list.querySelector('.list_group')) {
+      links_list.insertAdjacentHTML('beforeend', "<div class='list_group'></div>")
+    }
+    let links_group = links_list.querySelector('.list_group')
+    
+    removeAllChildLinks(links_group)
+
+    <% question.links.each do |link| %>
+      var elem = process_link_elem("<%= link.id %>")
+      <% if link.gist? %>
+        elem.insertAdjacentHTML('beforeend', "<code data-gist-id= '#{link.gist_id}' data-gist-line='1-5' data-gist-hide-line-numbers='true'></code>")
+        links_group.insertAdjacentElement('beforeend', elem)
+        window.GistEmbed.init("<%= link&.gist_id %>")
+      <% else %>
+        elem.insertAdjacentHTML('beforeend', '<%= link_to link.name, link.url, class: "my-2" %>')
+        links_group.insertAdjacentElement('beforeend', elem)
+      <% end %>
+    <% end %>
+  <% else %>
+    linksChildren = links_list.children
+    if (linksChildren.length) {
+      removeAllChildLinks(links_list) 
+    }
+  <% end %>
+}
+
+function updateAllLinkForms() {
+  var links = document.querySelector('.questions #links')
+
+  var allHiddenForms = links.querySelectorAll('.nested-fields[style="display: none;"]')
+  for (let i = 0; i < allHiddenForms.length; i++) {
+    allHiddenForms[i].nextElementSibling.remove()
+    allHiddenForms[i].remove()
+  }
+}
+
+function removeAllChildLinks(element) {
+  while(element.firstChild) {
+    element.removeChild(element.firstChild)
+  }
 }
 
 function process_file_elem(file) {
@@ -34,6 +86,16 @@ function process_file_elem(file) {
   elem.className += 'file'
   att = document.createAttribute('file-id')
   att.value = file
+  elem.setAttributeNode(att)
+
+  return elem
+}
+
+function process_link_elem(link) {
+  var elem = document.createElement('div')
+  elem.className += 'link'
+  att = document.createAttribute('link-id')
+  att.value = link
   elem.setAttributeNode(att)
 
   return elem

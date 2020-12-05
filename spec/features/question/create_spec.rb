@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-feature 'User can create question', %q{
+feature 'User can create question', "
   In order to get an answer from a community
   As an authenticated user
   I'd like to be able to ask the question
-} do
-
+" do
   given(:user) { create(:user) }
 
   describe 'Authenticated user' do
@@ -16,34 +15,60 @@ feature 'User can create question', %q{
       click_on 'Ask question'
     end
 
-    scenario 'user asks a questions' do
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
-      click_on 'Ask'
+    context 'with valid attributes' do
+      given(:url1) { 'https://gist.github.com/' }
 
-      expect(page).to have_content 'Your quesion successfully created.'
-      expect(page).to have_content 'Test question'
-      expect(page).to have_content 'text text text'
+      background do
+        fill_in 'question_title', with: 'Test question'
+        fill_in 'question_body', with: 'text text text'
+      end
+
+      scenario 'asks a questions' do
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your quesion successfully created.'
+        expect(page).to have_content 'Test question'
+        expect(page).to have_content 'text text text'
+      end
+
+      scenario 'asks a question with attached files' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Ask'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
+      scenario 'asks a question with added links', js: true do
+        within all('.nested-fields')[0] do
+          fill_in 'Link name', with: 'gist link'
+          fill_in 'Url', with: url1
+        end
+
+        click_on 'Ask'
+
+        expect(page).to have_link 'gist link', href: url1
+      end
+
+      scenario 'asks a question with added reward', js: true do
+        within('.reward_form') do
+          fill_in 'Title', with: 'reward'
+          attach_file 'Image', "#{Rails.root}/spec/fixtures/file/racecar.jpg"
+        end
+
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your quesion successfully created.'
+      end
     end
 
-    scenario 'user asks a question with errors' do
+    scenario 'asks a question with errors' do
       click_on 'Ask'
 
       expect(page).to have_content "Title can't be blank"
     end
-
-    scenario 'asks a question with attached files' do
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
-
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Ask'
-
-      expect(page).to have_link 'rails_helper.rb'
-      expect(page).to have_link 'spec_helper.rb'
-    end
   end
-  
+
   scenario 'Unanthenticated user tries to ask a question' do
     visit questions_path
     click_on 'Ask question'

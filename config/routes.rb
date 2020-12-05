@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "questions#index"
+  root to: 'questions#index'
 
   resources :questions do
     patch 'mark_best', on: :member
@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: %i[destroy]
+  resources :links, only: %i[destroy]
+  get 'rewards/index'
 end
