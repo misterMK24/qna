@@ -16,6 +16,6 @@ class Question < ApplicationRecord
 
   def mark_as_best(answer)
     update(best_answer_id: answer.id)
-    reward.update(user: answer.user)
+    reward&.update(user: answer.user)
   end
 end

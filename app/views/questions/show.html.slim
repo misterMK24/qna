@@ -1,5 +1,6 @@
 = javascript_pack_tag 'answers'
 = javascript_pack_tag 'questions'
+= javascript_pack_tag 'votes'
 
 .row
   .col-3.main_align
@@ -10,12 +11,22 @@
         .col.question_title
           h3= question.title
           .question-errors
+        .col.question_rating
+          h5= 'Rating: ' + question.resource_rating.to_s
         .col.buttons
           - if current_user&.author?(question)
             p 
               = link_to 'Edit', edit_question_path(question), class: 'btn btn-info edit_question'
               = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
-      .row.mb-4.question_body
+      - if !current_user&.author?(question) && current_user
+        .question_vote
+          p= link_to 'Vote Up', vote_resource_question_path(question, positive: true, format: :json),
+                                method: :patch, remote: true, class: 'vote_up_question'
+          p= link_to 'Vote Down', vote_resource_question_path(question, positive: false, format: :json),
+                                  method: :patch, remote: true, class: 'vote__down_question'
+          p= link_to 'Cancel Vote', vote_cancel_question_path(format: :json),
+                                method: :delete, remote: true, class: 'vote_cancel_question'
+      .row.question_body
         h4= question.body
       = render 'shared/link', resource: question
       = render 'shared/attachment', resource: question
@@ -32,4 +43,3 @@
       h3 Answer to a question
       .row
         = render 'answers/form', answer: @answer
-

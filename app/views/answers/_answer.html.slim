@@ -1,8 +1,12 @@
 .each_answer
   .answer*{'answer-id' => answer.id}
     .row
-      h5.answer_value
-        = answer.body
+      .col
+        h5.answer_value
+          = answer.body
+        .answer-error
+      .col.answer_rating
+        h5= 'Rating: ' + answer.resource_rating.to_s
     = render 'shared/link', resource: answer
     = render 'shared/attachment', resource: answer
     p  
@@ -13,6 +17,15 @@
       - if current_user&.author?(answer) 
         = link_to 'Edit', '', class: 'ml-2 edit_answer', data: { answer_id: answer.id }
         = link_to 'Delete', answer, remote: true, method: :delete, class: 'ml-2 delete_answer'
+
+      - if !current_user&.author?(answer) && current_user
+          .answer_vote
+            = link_to 'Vote Up', vote_resource_answer_path(answer, positive: true, format: :json),
+                                 method: :patch, remote: true, class: 'ml-2 vote_answer'
+            = link_to 'Vote Down', vote_resource_answer_path(answer, positive: false, format: :json),
+                                   method: :patch, remote: true, class: 'ml-2 vote_answer'
+            = link_to 'Cancel Vote', vote_cancel_answer_path(id: answer.id, format: :json),
+                                     method: :delete, remote: true, class: 'ml-2 vote_answer'
 
     = form_with model: answer,  class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body
