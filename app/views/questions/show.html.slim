@@ -20,9 +20,9 @@
               = link_to 'Delete', question_path(question), method: :delete, class: 'btn btn-info ml-2 delete_question'
       - if !current_user&.author?(question) && current_user
         .question_vote
-          p= link_to 'Vote Up', vote_resource_question_path(question, positive: true, format: :json),
+          p= link_to 'Vote Up', vote_resource_question_path(question, count: 1, format: :json),
                                 method: :patch, remote: true, class: 'vote_up_question'
-          p= link_to 'Vote Down', vote_resource_question_path(question, positive: false, format: :json),
+          p= link_to 'Vote Down', vote_resource_question_path(question, count: -1, format: :json),
                                   method: :patch, remote: true, class: 'vote__down_question'
           p= link_to 'Cancel Vote', vote_cancel_question_path(format: :json),
                                 method: :delete, remote: true, class: 'vote_cancel_question'

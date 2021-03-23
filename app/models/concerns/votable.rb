@@ -6,6 +6,6 @@ module Votable
   end
 
   def resource_rating
-    votes.where(positive: true).count - votes.where(positive: false).count
+    votes.pluck(:count).sum
   end
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :vote do
-    positive { true }
+    count { 1 }
     user
     with_question
 

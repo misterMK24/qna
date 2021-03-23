@@ -5,7 +5,7 @@ shared_examples 'voted' do
     context 'when not author of these resource' do
       before do
         login(user)
-        patch :vote_resource, params: { id: votable, positive: true, format: :json }
+        patch :vote_resource, params: { id: votable, count: 1, format: :json }
       end
 
       it 'rendering json response' do
@@ -28,7 +28,7 @@ shared_examples 'voted' do
     context 'when author of these resource' do
       before do
         login(votable.user)
-        patch :vote_resource, params: { id: votable, positive: true, format: :json }
+        patch :vote_resource, params: { id: votable, count: 1, format: :json }
       end
 
       it 'gets an error' do
@@ -41,11 +41,11 @@ shared_examples 'voted' do
     context 'when has already voted for these resource' do
       before do
         login(user)
-        patch :vote_resource, params: { id: votable, positive: true, format: :json }
+        patch :vote_resource, params: { id: votable, count: 1, format: :json }
       end
 
       it 'gets an error' do
-        patch :vote_resource, params: { id: votable, positive: true, format: :json }
+        patch :vote_resource, params: { id: votable, count: 1, format: :json }
         expect(response.body).to include('User has already voted')
         expect(response.headers['Content-Type']).to eq 'application/json; charset=utf-8'
         expect(response).to have_http_status(:forbidden)
@@ -54,15 +54,28 @@ shared_examples 'voted' do
   end
 
   describe 'DELETE #vote_cancel' do
+    before do
+      login(user)
+    end
+
     context 'when has already voted for these resource' do
       before do
-        login(user)
         create(:vote, user: user, votable: votable)
-        # patch :vote_resource, params: { id: votable, postivie: true, format: :json }
       end
 
       it 'canceling a vote' do
         expect { delete :vote_cancel, params: { id: votable, format: :json } }.to change(Vote, :count).by(-1)
+      end
+    end
+
+    context 'when has not voted for these resource yet' do
+      before do
+        delete :vote_cancel, params: { id: votable, format: :json }
+      end
+
+      it 'returns empty response' do
+        expect(response).to have_http_status(:no_content)
+        expect(response.body).to be_empty
       end
     end
   end

@@ -6,7 +6,7 @@ module Voted
   end
 
   def vote_resource
-    @vote = Vote.new(user: current_user, votable: @votable, positive: params[:positive])
+    @vote = Vote.new(user: current_user, votable: @votable, count: params[:count])
 
     respond_to do |format|
       if @vote.save
@@ -19,7 +19,7 @@ module Voted
 
   def vote_cancel
     @vote = Vote.find_by(user: current_user, votable: @votable)
-    return nil unless @vote
+    return empty_response unless @vote
 
     respond_to do |format|
       @vote.destroy
@@ -35,6 +35,10 @@ module Voted
 
   def model_klass
     controller_name.classify.constantize
+  end
+
+  def empty_response
+    head :no_content
   end
 
   def render_errors

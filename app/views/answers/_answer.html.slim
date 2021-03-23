@@ -20,9 +20,9 @@
 
       - if !current_user&.author?(answer) && current_user
           .answer_vote
-            = link_to 'Vote Up', vote_resource_answer_path(answer, positive: true, format: :json),
+            = link_to 'Vote Up', vote_resource_answer_path(answer, count: 1, format: :json),
                                  method: :patch, remote: true, class: 'ml-2 vote_answer'
-            = link_to 'Vote Down', vote_resource_answer_path(answer, positive: false, format: :json),
+            = link_to 'Vote Down', vote_resource_answer_path(answer, count: -1, format: :json),
                                    method: :patch, remote: true, class: 'ml-2 vote_answer'
             = link_to 'Cancel Vote', vote_cancel_answer_path(id: answer.id, format: :json),
                                      method: :delete, remote: true, class: 'ml-2 vote_answer'
