@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include Voted
+  include Commented
 
   before_action :authenticate_user!, except: %i[index show]
 
@@ -11,6 +12,7 @@ class QuestionsController < ApplicationController
     @best_answer = question.best_answer
     @other_answers = question.answers.where.not(id: question.best_answer_id)
     @answer = Answer.new
+    @comment = Comment.new
     @answer.links.new
   end
 

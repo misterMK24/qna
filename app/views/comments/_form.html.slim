@@ -1,0 +1,6 @@
+= form_with model: [commentable.comments.new], class: 'd-none', html: { id: 'new_comment_question' },
+            url: url_for(action: 'create_comment', id: commentable.id,
+                                            controller: commentable.class.name.parameterize.pluralize) do |f|
+  = f.label :body
+  p= f.text_area :body
+  = f.submit 'Post'

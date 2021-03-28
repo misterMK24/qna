@@ -1,0 +1,7 @@
+.row
+  .col
+    h6= comment.body
+    = link_to 'delete', destroy_comment_question_path(comment.commentable),
+                        method: :delete if current_user == comment.user
+  .col
+    h6= 'Author: ' + comment.user.email

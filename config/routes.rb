@@ -9,11 +9,18 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :commentable do
+    member do
+      post :create_comment
+      delete :destroy_comment
+    end
+  end
+
   resources :questions do
-    concerns :votable
+    concerns :votable, :commentable
     patch 'mark_best', on: :member
     resources :answers, shallow: true, only: %i[create update destroy] do
-      concerns :votable
+      concerns :votable, :commentable
     end
   end
 

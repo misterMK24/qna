@@ -1,0 +1,7 @@
+$('.question-errors').html('<%= render 'shared/errors', resource: @comment %>');
+
+<% if @comment.persisted? %>
+  $('.question_comments').append('<%= render @comment %>')
+  document.querySelector('form#new_comment_question').classList.add('d-none')
+  document.querySelector('.btn_new_question_comment').classList.remove('d-none')
+<% end %>
