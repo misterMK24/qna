@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  include Votable
+
   has_many :answers, dependent: :destroy
   has_many :links, as: :linkable, dependent: :destroy
   has_one :reward, dependent: :destroy
@@ -14,6 +16,6 @@ class Question < ApplicationRecord
 
   def mark_as_best(answer)
     update(best_answer_id: answer.id)
-    reward.update(user: answer.user)
+    reward&.update(user: answer.user)
   end
 end

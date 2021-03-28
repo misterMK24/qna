@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/votable_spec'
 
 RSpec.describe Question, type: :model do
+  it_behaves_like 'votable'
+
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:links).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
