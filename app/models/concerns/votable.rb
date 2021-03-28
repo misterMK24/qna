@@ -6,6 +6,6 @@ module Votable
   end
 
   def resource_rating
-    votes.pluck(:count).sum
+    votes.sum(:count)
   end
 end

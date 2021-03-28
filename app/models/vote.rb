@@ -9,6 +9,6 @@ class Vote < ApplicationRecord
   private
 
   def authorship
-    errors.add(:user, 'is author of this resource') if user == votable.user
+    errors.add(:user, 'is author of this resource') if user.author?(votable)
   end
 end
