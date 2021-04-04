@@ -2,7 +2,7 @@ module Commented
   extend ActiveSupport::Concern
 
   included do
-    before_action :current_commentable, only: %i[create_comment destroy_comment]
+    before_action :current_commentable, only: %i[create_comment]
   end
 
   def create_comment
@@ -12,6 +12,8 @@ module Commented
   end
 
   def destroy_comment
+    @comment = Comment.find(params[:id])
+    @comment.destroy
   end
 
   private
