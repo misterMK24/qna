@@ -1,5 +1,5 @@
 .row.comment*{'comment-id' => comment.id}
-  p.col.p= comment.body
+  p.col= comment.body
   .mr-4= 'Author: ' + comment.user.email
   = link_to 'delete', destroy_comment_question_path(comment.id),
-                    method: :delete, class: "delete_question_comment" if current_user.author?(comment)
+                    method: :delete, class: "delete_comment" if current_user.author?(comment)

@@ -26,6 +26,11 @@
                                    method: :patch, remote: true, class: 'ml-2 vote_answer'
             = link_to 'Cancel Vote', vote_cancel_answer_path(id: answer.id, format: :json),
                                      method: :delete, remote: true, class: 'ml-2 vote_answer'
+      .col.answer_comments
+        = render answer.comments
+      .row.new_answer_comment
+        = link_to 'Add comment', '', class: 'btn_new_answer_comment', data: { answer_id: answer.id }
+        = render 'comments/form', commentable: answer
 
     = form_with model: answer,  class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body

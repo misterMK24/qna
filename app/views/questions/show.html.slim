@@ -32,7 +32,7 @@
       .col.question_comments
         = render question.comments
       .row.new_question_comment
-        = link_to 'Add comment', '', class: 'btn_new_question_comment'
+        = link_to 'Add comment', '', class: 'btn_new_question_comment', data: { question_id: question.id }
         = render 'comments/form', commentable: question
       = render 'shared/link', resource: question
       = render 'shared/attachment', resource: question

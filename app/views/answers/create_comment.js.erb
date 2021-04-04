@@ -1,0 +1,7 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
+
+<% if @comment.persisted? %>
+  $('.each_answer').find('.answer[answer-id=<%= @comment.commentable.id %>] .answer_comments').append('<%= j render @comment %>')
+  document.querySelector('form#new_comment_answer' + '_' + <%= @comment.commentable.id %>).classList.add('d-none')
+  document.querySelector('.btn_new_answer_comment[data-answer-id="49"]').classList.remove('d-none')
+<% end %>

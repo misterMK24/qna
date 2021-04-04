@@ -1,4 +1,4 @@
-= form_with model: [commentable.comments.new], class: 'd-none', html: { id: 'new_comment_question' },
+= form_with model: [commentable.comments.new], class: 'd-none', html: { id: "new_comment_#{commentable.class.name.downcase}_#{commentable.id}" },
             url: url_for(action: 'create_comment', id: commentable.id,
                                             controller: commentable.class.name.parameterize.pluralize) do |f|
   = f.label :body
