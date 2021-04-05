@@ -224,4 +224,8 @@ RSpec.describe QuestionsController, type: :controller do
   it_behaves_like 'voted' do
     let(:votable) { create(:question) }
   end
+
+  it_behaves_like 'commented' do
+    let(:commentable) { create(:question) }
+  end
 end
